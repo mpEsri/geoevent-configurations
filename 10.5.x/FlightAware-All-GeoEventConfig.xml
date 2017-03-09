@@ -1,0 +1,1258 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template key="+1ZAApp0KbB39eQ1Njzu8A==" productVersion="10.5.0">
+    <geoEventServices>
+        <geoEventService name="33209d2c-f268-4781-86c0-5c9269305245" label="FlightAwareArrival" description="FlightAware Arrival" lineStyle="Diagonal" runningState="STOPPED" statusDetails="">
+            <inputs>
+                <input ref="0db4d8ab-f917-4975-8d3b-4f1c67006a3f" label="flightaware-in" left="208" top="274" width="92" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="7b2f6c54-eabe-47d6-8387-83e2ce965731" label="flightaware-arrival-stream-service-out" left="579" top="268" width="200" height="50"/>
+            </outputs>
+            <nodes>
+                <node name="28cdf07e-b8a0-457e-8ff9-685705c92b17" label="ArrivalFilter" left="381" top="264" width="105" height="62">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="$DEFINITION_NAME" operator="=" value="FlightAwareArrival"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="28cdf07e-b8a0-457e-8ff9-685705c92b17" label="ArrivalFilter">
+                    <to ref="7b2f6c54-eabe-47d6-8387-83e2ce965731" label="flightaware-arrival-stream-service-out"/>
+                </from>
+                <from ref="0db4d8ab-f917-4975-8d3b-4f1c67006a3f" label="flightaware-in">
+                    <to ref="28cdf07e-b8a0-457e-8ff9-685705c92b17" label="ArrivalFilter"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+        <geoEventService name="e968e953-4657-4bc6-8dbe-077be62ee7d5" label="FlightAwareGroundPosition" description="FlightAwareGroundPosition" lineStyle="Diagonal" runningState="STARTED" statusDetails="">
+            <inputs>
+                <input ref="0db4d8ab-f917-4975-8d3b-4f1c67006a3f" label="flightaware-in" left="100" top="233" width="87" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="095d4f60-371a-4bc6-81ad-33e0943de937" label="flightaware-groundposition-stream-service-out" left="562" top="275" width="200" height="50"/>
+                <output ref="de80bb8f-13a9-492f-8024-50b24985048a" label="flightaware-groundposition-update-bds-out" left="558" top="140" width="200" height="50"/>
+            </outputs>
+            <nodes>
+                <node name="a003d2bf-3060-4d41-893c-32f272240308" label="FlightAwareGroundPosition" left="283" top="210" width="122" height="73">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="$DEFINITION_NAME" operator="=" value="FlightAwareGroundPosition"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="a003d2bf-3060-4d41-893c-32f272240308" label="FlightAwareGroundPosition">
+                    <to ref="095d4f60-371a-4bc6-81ad-33e0943de937" label="flightaware-groundposition-stream-service-out"/>
+                    <to ref="de80bb8f-13a9-492f-8024-50b24985048a" label="flightaware-groundposition-update-bds-out"/>
+                </from>
+                <from ref="0db4d8ab-f917-4975-8d3b-4f1c67006a3f" label="flightaware-in">
+                    <to ref="a003d2bf-3060-4d41-893c-32f272240308" label="FlightAwareGroundPosition"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+        <geoEventService name="3063caad-2061-4d47-8cfe-e473320cbbe3" label="FlightAwareCancellation" description="FlightAware Cancellation" lineStyle="Diagonal" runningState="STOPPED" statusDetails="">
+            <inputs>
+                <input ref="0db4d8ab-f917-4975-8d3b-4f1c67006a3f" label="flightaware-in" left="255" top="311" width="92" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="cfbd737e-2d26-4bb5-837b-1e632d465150" label="flightaware-cancellation-stream-service-out" left="663" top="310" width="200" height="50"/>
+            </outputs>
+            <nodes>
+                <node name="3b95a617-6f43-4d77-812e-e380d460a853" label="CancellationFilter" left="434" top="304" width="143" height="62">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="$DEFINITION_NAME" operator="=" value="FlightAwareCancellation"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="0db4d8ab-f917-4975-8d3b-4f1c67006a3f" label="flightaware-in">
+                    <to ref="3b95a617-6f43-4d77-812e-e380d460a853" label="CancellationFilter"/>
+                </from>
+                <from ref="3b95a617-6f43-4d77-812e-e380d460a853" label="CancellationFilter">
+                    <to ref="cfbd737e-2d26-4bb5-837b-1e632d465150" label="flightaware-cancellation-stream-service-out"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+        <geoEventService name="65992817-a782-4f05-8c26-054fc567f642" label="FlightAwareVehiclePosition" description="FlightAwareVehiclePosition" lineStyle="Diagonal" runningState="STARTED" statusDetails="">
+            <inputs>
+                <input ref="0db4d8ab-f917-4975-8d3b-4f1c67006a3f" label="flightaware-in" left="100" top="233" width="87" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="44ce93f2-8d44-451f-8cef-9793f58da2b5" label="flightaware-vehicleposition-stream-service-out" left="567" top="268" width="200" height="50"/>
+                <output ref="8dea6fce-a33b-45bb-86e6-8088bff4c711" label="flightaware-vehicleposition-update-bds-out" left="565" top="134" width="200" height="50"/>
+            </outputs>
+            <nodes>
+                <node name="a003d2bf-3060-4d41-893c-32f272240308" label="FlightAwareVehiclePosition" left="283" top="210" width="122" height="73">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="$DEFINITION_NAME" operator="=" value="FlightAwareVehiclePosition"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="a003d2bf-3060-4d41-893c-32f272240308" label="FlightAwareVehiclePosition">
+                    <to ref="8dea6fce-a33b-45bb-86e6-8088bff4c711" label="flightaware-vehicleposition-update-bds-out"/>
+                    <to ref="44ce93f2-8d44-451f-8cef-9793f58da2b5" label="flightaware-vehicleposition-stream-service-out"/>
+                </from>
+                <from ref="0db4d8ab-f917-4975-8d3b-4f1c67006a3f" label="flightaware-in">
+                    <to ref="a003d2bf-3060-4d41-893c-32f272240308" label="FlightAwareVehiclePosition"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+        <geoEventService name="167cabc7-a2b4-4b5e-8787-fa7412c55138" label="FlightAware-Position" description="FlightAware-Position" lineStyle="Diagonal" runningState="STOPPED" statusDetails="">
+            <inputs>
+                <input ref="0db4d8ab-f917-4975-8d3b-4f1c67006a3f" label="flightaware-in" left="72" top="275" width="87" height="40"/>
+                <input ref="Text_on_5555" label="Text_on_5555" left="60" top="395" width="91" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="afbeca61-9791-428b-86a7-1d2ccf743fde" label="flightaware-file-out" left="1031" top="147" width="119" height="40"/>
+                <output ref="22c68d00-5511-4fd8-8cdf-df223939b6e8" label="flightaware-position-stream-service-out" left="849" top="392" width="196" height="51"/>
+            </outputs>
+            <nodes>
+                <node name="a1ad0967-e7e1-4296-8528-44d4c6fba98a" label="Alt-Feet-to-Meters" left="450" top="288" width="120" height="40">
+                    <processor uri="com.esri.ges.processor/FieldCalculator/10.5.0">
+                        <properties>
+                            <property name="existingFieldName" type="String"></property>
+                            <property name="newGeoEventDefinitionName" type="String">FlightAwarePositionZMeters</property>
+                            <property name="expression" type="String">(alt * 0.3048)</property>
+                            <property name="resultDestination" type="String">New Field</property>
+                            <property name="newFieldTag" type="String"></property>
+                            <property name="newFieldType" type="String">Double</property>
+                            <property name="newFieldName" type="String">altMeters</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="0719eb1d-2613-481f-801e-69582b5dcbba" label="FM-Position" left="820" top="302" width="77" height="40">
+                    <processor uri="com.esri.ges.processor/FieldMapper/10.5.0">
+                        <properties>
+                            <property name="inputFields" type="String">type,ident,lat,lon,clock,updateType,id,air_ground,hexid,alt,gs,heading,rp1lat,rp1lon,rp1alt,rp1clock,fob,oat,airspeed_kts,airspeed_mach,winds,eta,baro_alt,gps_alt,atcident,reg,squawk,altChange,Geometry</property>
+                            <property name="outputFields" type="String">type,ident,lat,lon,clock,updateType,id,air_ground,hexid,alt,gs,heading,rp1lat,rp1lon,rp1alt,rp1clock,fob,oat,airspeed_kts,airspeed_mach,winds,eta,baro_alt,gps_alt,atcident,reg,squawk,altChange,Geometry</property>
+                            <property name="inputGeoEventDefinition" type="GeoEventDefinition">FlightAwarePositionZMeters</property>
+                            <property name="outputGeoEventDefinition" type="GeoEventDefinition">FlightAwarePosition</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="9362c4ab-2bea-4bee-8318-338ff0659c62" label="Z-Feet-to-Meters" left="639" top="256" width="112" height="40">
+                    <processor uri="com.esri.ges.processor/FieldCalculator/10.5.0">
+                        <properties>
+                            <property name="existingFieldName" type="String">GEOMETRY</property>
+                            <property name="newGeoEventDefinitionName" type="String">FieldCalculator</property>
+                            <property name="expression" type="String">'{"x" :' + lon + ',"y" : ' + lat + ',"z" :' + altMeters + ',"spatialReference" : {"wkid" : 4326}}'</property>
+                            <property name="resultDestination" type="String">Existing Field</property>
+                            <property name="newFieldTag" type="String"></property>
+                            <property name="newFieldType" type="String">Boolean</property>
+                            <property name="newFieldName" type="String"></property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="622aa3ca-492a-4129-81ee-3acb23102f63" label="SDCampPendletonFilter" left="725" top="86" width="106" height="61">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <spatialCondition operand="GEOMETRY" geofence=".*/.*" operator="INSIDE_ANY"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+                <node name="692cc221-712e-4b73-82b3-ffad9a0d97b2" label="FlightAware-Filter" left="239" top="317" width="123" height="72">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="$DEFINITION_NAME" operator="=" value="FlightAwarePosition"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="a1ad0967-e7e1-4296-8528-44d4c6fba98a" label="Alt-Feet-to-Meters">
+                    <to ref="9362c4ab-2bea-4bee-8318-338ff0659c62" label="Z-Feet-to-Meters"/>
+                </from>
+                <from ref="0719eb1d-2613-481f-801e-69582b5dcbba" label="FM-Position">
+                    <to ref="22c68d00-5511-4fd8-8cdf-df223939b6e8" label="flightaware-position-stream-service-out"/>
+                    <to ref="622aa3ca-492a-4129-81ee-3acb23102f63" label="SDCampPendletonFilter"/>
+                </from>
+                <from ref="0db4d8ab-f917-4975-8d3b-4f1c67006a3f" label="flightaware-in">
+                    <to ref="692cc221-712e-4b73-82b3-ffad9a0d97b2" label="FlightAware-Filter"/>
+                </from>
+                <from ref="9362c4ab-2bea-4bee-8318-338ff0659c62" label="Z-Feet-to-Meters">
+                    <to ref="0719eb1d-2613-481f-801e-69582b5dcbba" label="FM-Position"/>
+                </from>
+                <from ref="Text_on_5555" label="Text_on_5555">
+                    <to ref="692cc221-712e-4b73-82b3-ffad9a0d97b2" label="FlightAware-Filter"/>
+                </from>
+                <from ref="622aa3ca-492a-4129-81ee-3acb23102f63" label="SDCampPendletonFilter">
+                    <to ref="afbeca61-9791-428b-86a7-1d2ccf743fde" label="flightaware-file-out"/>
+                </from>
+                <from ref="692cc221-712e-4b73-82b3-ffad9a0d97b2" label="FlightAware-Filter">
+                    <to ref="a1ad0967-e7e1-4296-8528-44d4c6fba98a" label="Alt-Feet-to-Meters"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+        <geoEventService name="1839caaf-0cd5-44cd-8830-ea6a28272b77" label="FlightAwareDeparture" description="FlightAware Departure" lineStyle="Diagonal" runningState="STOPPED" statusDetails="">
+            <inputs>
+                <input ref="0db4d8ab-f917-4975-8d3b-4f1c67006a3f" label="flightaware-in" left="188" top="250" width="92" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="716adcef-bec9-4c25-8f91-c7ce8acb228c" label="flightaware-departure-stream-service-out" left="563" top="245" width="200" height="50"/>
+            </outputs>
+            <nodes>
+                <node name="73035e66-703a-47a0-8490-05e014c08841" label="Departure-Filter" left="359" top="242" width="135" height="62">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="$DEFINITION_NAME" operator="=" value="FlightAwareDeparture"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="0db4d8ab-f917-4975-8d3b-4f1c67006a3f" label="flightaware-in">
+                    <to ref="73035e66-703a-47a0-8490-05e014c08841" label="Departure-Filter"/>
+                </from>
+                <from ref="73035e66-703a-47a0-8490-05e014c08841" label="Departure-Filter">
+                    <to ref="716adcef-bec9-4c25-8f91-c7ce8acb228c" label="flightaware-departure-stream-service-out"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+        <geoEventService name="4de2dd74-80f0-49e1-8c8d-ca35f60fe063" label="FlightAware-FlightPlan" description="FlightAware-FlightPlan" lineStyle="Diagonal" runningState="STOPPED" statusDetails="">
+            <inputs>
+                <input ref="0db4d8ab-f917-4975-8d3b-4f1c67006a3f" label="flightaware-in" left="52" top="183" width="87" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="fb02d021-ac1a-469c-843a-bb643c454cdf" label="flightaware-flightplan-stream-service-out" left="464" top="257" width="196" height="51"/>
+            </outputs>
+            <nodes>
+                <node name="8d148156-2d21-4fbe-80fe-3de3cd8e753e" label="FlightPlan-Filter" left="219" top="172" width="119" height="84">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="$DEFINITION_NAME" operator="=" value="FlightAwareFlightPlan"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="0db4d8ab-f917-4975-8d3b-4f1c67006a3f" label="flightaware-in">
+                    <to ref="8d148156-2d21-4fbe-80fe-3de3cd8e753e" label="FlightPlan-Filter"/>
+                </from>
+                <from ref="8d148156-2d21-4fbe-80fe-3de3cd8e753e" label="FlightPlan-Filter">
+                    <to ref="fb02d021-ac1a-469c-843a-bb643c454cdf" label="flightaware-flightplan-stream-service-out"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+    </geoEventServices>
+    <inputs>
+        <input clusterCommand="START" connector="receive-flightaware-connector" connectorLabel="Receive FlightAware" hostName="WIN-C69CU5GLS79" label="flightaware-in" name="0db4d8ab-f917-4975-8d3b-4f1c67006a3f" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.geoevent.adapter.inbound/Flight/10.5.0"/>
+            <geoEventDefinitionHistory>
+                <guid>d92a69ce-d073-4b67-8ca5-32e6f86a4049</guid>
+                <guid>d37f2e8e-a281-4686-87a6-d43b3a7fecd5</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.geoevent.transport.inbound/FlightAware/10.5.0">
+                <properties>
+                    <property name="arrival" type="Boolean">false</property>
+                    <property name="rangeEpochStart" type="Integer">0</property>
+                    <property name="mode" type="String">live</property>
+                    <property name="password" type="Password">lMcuOTJoYOIiPdmC82sLlw6DSwzAiOj1DdMdGXQ5GB8DbuRe8c9Cak/WQxsARhRt</property>
+                    <property name="host" type="String">firehose-test.flightaware.com</property>
+                    <property name="vehicle_position" type="Boolean">true</property>
+                    <property name="ground_position" type="Boolean">true</property>
+                    <property name="rangeEpochEnd" type="Integer">0</property>
+                    <property name="idents" type="String"></property>
+                    <property name="flightPlan" type="Boolean">false</property>
+                    <property name="format" type="String"></property>
+                    <property name="version" type="String"></property>
+                    <property name="onblock" type="Boolean">false</property>
+                    <property name="airport_filter" type="String"></property>
+                    <property name="filter" type="String"></property>
+                    <property name="flightPosition" type="Boolean">false</property>
+                    <property name="cancellation" type="Boolean">false</property>
+                    <property name="port" type="Integer">1501</property>
+                    <property name="aois" type="String"></property>
+                    <property name="offblock" type="Boolean">false</property>
+                    <property name="pitrEpoch" type="Integer">0</property>
+                    <property name="departure" type="Boolean">false</property>
+                    <property name="compression" type="String">gzip</property>
+                    <property name="username" type="String">esridev</property>
+                </properties>
+            </transport>
+        </input>
+        <input clusterCommand="START" connector="esri-in-tcp-text-generictext" connectorLabel="Receive text from a TCP Socket" label="Text_on_5555" name="Text_on_5555" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.inbound/Text/10.5.0">
+                <properties>
+                    <property name="CreateFixedGeoEventDefinitions" type="Boolean">true</property>
+                    <property name="YGeometryField" type="String">Latitude</property>
+                    <property name="ZGeometryField" type="String"></property>
+                    <property name="MessageSeparator" type="String">\n</property>
+                    <property name="IncomingDataContainsGeoEventDefinition" type="Boolean">true</property>
+                    <property name="CreateUnrecognizedGeoEventDefinitions" type="Boolean">true</property>
+                    <property name="WKTextGeometryField" type="String"></property>
+                    <property name="LocaleForNumberFormatter" type="String"></property>
+                    <property name="BuildGeometryFromFields" type="Boolean">true</property>
+                    <property name="CustomDateFormat" type="String"></property>
+                    <property name="NewFixedGeoEventDefinitionName" type="String"></property>
+                    <property name="WKIDGeometryField" type="String"></property>
+                    <property name="ExistingFixedGeoEventDefinitionName" type="GeoEventDefinition">incident</property>
+                    <property name="XGeometryField" type="String">Longitude</property>
+                    <property name="AttributeSeparator" type="String">,</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.inbound/TCP/10.5.0">
+                <properties>
+                    <property name="mode" type="String">SERVER</property>
+                    <property name="handshake" type="String"></property>
+                    <property name="port" type="Integer">5555</property>
+                    <property name="host" type="String">localhost</property>
+                    <property name="clientConnectionTimeout" type="Integer">60</property>
+                </properties>
+            </transport>
+        </input>
+    </inputs>
+    <outputs>
+        <output clusterCommand="STOP" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="flightaware-arrival-stream-service-out" name="7b2f6c54-eabe-47d6-8387-83e2ce965731" runningState="STOPPED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.5.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.5.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">FlightAwareArrival</property>
+                    <property name="serviceName" type="ArcGISStreamService">FlightAwareArrival</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="STOP" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="flightaware-cancellation-stream-service-out" name="cfbd737e-2d26-4bb5-837b-1e632d465150" runningState="STOPPED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.5.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.5.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">FlightAwareCancellation</property>
+                    <property name="serviceName" type="ArcGISStreamService">FlightAwareCancellation</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="flightaware-groundposition-stream-service-out" name="095d4f60-371a-4bc6-81ad-33e0943de937" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.5.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>94806c75-2889-4f2e-b124-7a2c70eb8ad7</guid>
+                <guid>d92a69ce-d073-4b67-8ca5-32e6f86a4049</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.5.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">FlightAwareGroundPosition</property>
+                    <property name="serviceName" type="ArcGISStreamService">FlightAwareGroundPosition</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-bds-update" connectorLabel="Update a Feature in an ArcGIS Spatiotemporal Big Data Store" label="flightaware-groundposition-update-bds-out" name="de80bb8f-13a9-492f-8024-50b24985048a" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/Noop/10.5.0"/>
+            <geoEventDefinitionHistory>
+                <guid>94806c75-2889-4f2e-b124-7a2c70eb8ad7</guid>
+                <guid>d92a69ce-d073-4b67-8ca5-32e6f86a4049</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/BDS/10.5.0">
+                <properties>
+                    <property name="bdsDataSource" type="ArcGISBDSSource">FlightAwareGroundPosition</property>
+                    <property name="datastore" type="ArcGISBDSConnection">default</property>
+                    <property name="maximumTransactionSize" type="Integer">1000</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">FlightAwareGroundPosition</property>
+                    <property name="flushInterval" type="Integer">100</property>
+                    <property name="updateField" type="GeoEventDefinitionField">ident</property>
+                    <property name="append" type="Boolean">false</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="STOP" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="flightaware-position-stream-service-out" name="22c68d00-5511-4fd8-8cdf-df223939b6e8" runningState="STOPPED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.5.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.0001</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.5.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">FlightAwarePosition</property>
+                    <property name="serviceName" type="ArcGISStreamService">FlightAwarePosition</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="STOP" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="flightaware-flightplan-stream-service-out" name="fb02d021-ac1a-469c-843a-bb643c454cdf" runningState="STOPPED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.5.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.5.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">FlightAwareFlightPlan</property>
+                    <property name="serviceName" type="ArcGISStreamService">FlightAwareFlightPlan</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="STOP" connector="esri-out-csv-file-log" connectorLabel="Write to a CSV File" label="flightaware-file-out" name="afbeca61-9791-428b-86a7-1d2ccf743fde" runningState="STOPPED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/Text/10.5.0">
+                <properties>
+                    <property name="LocaleForNumberFormatter" type="String"></property>
+                    <property name="CustomDateFormat" type="String"></property>
+                    <property name="MessageSeparator" type="String">\n</property>
+                    <property name="mimeType" type="String">text/plain</property>
+                    <property name="CustomDateFormatType" type="String"></property>
+                    <property name="AttributeSeparator" type="String">,</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/File/10.5.0">
+                <properties>
+                    <property name="outputFolderDataStore" type="FolderDataStore">47df1f15-538c-46b7-8016-3297c9a13b1b</property>
+                    <property name="outputFilesShouldExpire" type="String">Archive</property>
+                    <property name="outputFileFooter" type="String"></property>
+                    <property name="outputFileExtension" type="String">csv</property>
+                    <property name="outputFileSizeLimitValue" type="Integer">10240</property>
+                    <property name="outputBaseFileName" type="String">flightaware</property>
+                    <property name="outputFileEventSeparator" type="String"></property>
+                    <property name="outputFileHeader" type="String"></property>
+                    <property name="outputExpirationValueInMinutes" type="Integer">4320</property>
+                    <property name="outputFileFrequency" type="String">Hourly</property>
+                    <property name="outputDirectory" type="String">flightaware</property>
+                    <property name="outputArchiveLocation" type="String">flightaware-archive</property>
+                    <property name="outputFileSizeLimitMethod" type="String">By Size</property>
+                    <property name="outputArchiveDataStore" type="FolderDataStore">47df1f15-538c-46b7-8016-3297c9a13b1b</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="STOP" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="flightaware-departure-stream-service-out" name="716adcef-bec9-4c25-8f91-c7ce8acb228c" runningState="STOPPED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.5.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.5.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">FlightAwareDeparture</property>
+                    <property name="serviceName" type="ArcGISStreamService">FlightAwareDeparture</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="flightaware-vehicleposition-stream-service-out" name="44ce93f2-8d44-451f-8cef-9793f58da2b5" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.5.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>9644adbf-2660-4bb5-9db5-536c57d1a22f</guid>
+                <guid>d37f2e8e-a281-4686-87a6-d43b3a7fecd5</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.5.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">FlightAwareVehiclePosition</property>
+                    <property name="serviceName" type="ArcGISStreamService">FlightAwareVehiclePosition</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-bds-update" connectorLabel="Update a Feature in an ArcGIS Spatiotemporal Big Data Store" label="flightaware-vehicleposition-update-bds-out" name="8dea6fce-a33b-45bb-86e6-8088bff4c711" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/Noop/10.5.0"/>
+            <geoEventDefinitionHistory>
+                <guid>9644adbf-2660-4bb5-9db5-536c57d1a22f</guid>
+                <guid>d37f2e8e-a281-4686-87a6-d43b3a7fecd5</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/BDS/10.5.0">
+                <properties>
+                    <property name="bdsDataSource" type="ArcGISBDSSource">FlightAwareVehiclePosition</property>
+                    <property name="datastore" type="ArcGISBDSConnection">default</property>
+                    <property name="maximumTransactionSize" type="Integer">1000</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">FlightAwareVehiclePosition</property>
+                    <property name="flushInterval" type="Integer">100</property>
+                    <property name="updateField" type="GeoEventDefinitionField">ident</property>
+                    <property name="append" type="Boolean">false</property>
+                </properties>
+            </transport>
+        </output>
+    </outputs>
+    <geoEventDefinitions>
+        <geoEventDefinition guid="61c67a78-4a29-40b5-a997-7f92881a10b8" name="FlightAwareCancellation" owner="com.esri.geoevent.adapter.inbound/Flight/10.5.0" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="type" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="ident" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="orig" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="dest" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="id" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="pitr" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="facility_hash" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="facility_name" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="atcident" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="airline" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="a230b0a4-cb8e-431d-b520-9f0cdf12b6d9" name="FlightAwarePositionZMeters" owner="Alt-Feet-to-Meters" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="type" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="ident" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="lat" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="lon" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="clock" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="id" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="updateType" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="air_ground" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="facility_hash" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="facility_name" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="pitr" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="alt" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="altChange" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="gs" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="heading" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="rp1lat" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="rp1lon" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="rp1alt" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="rp1clock" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="squawk" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="hexid" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="fob" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="oat" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="airspeed_kts" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="airspeed_mach" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="winds" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="eta" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="baro_alt" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="gps_alt" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="atcident" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="altMeters" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="fb9bc60d-1e20-4bc9-9e78-55e6427717f2" name="FlightAwareDeparture" owner="com.esri.geoevent.adapter.inbound/Flight/10.5.0" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="type" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="ident" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="orig" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="dest" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="adt" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="eta" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="id" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="pitr" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="aircrafttype" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="facility_hash" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="facility_name" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="synthetic" type="Boolean" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="atcident" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="airline" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="59b0886a-1b56-4383-a8c0-6b6a94b21b63" name="FlightAwareArrival" owner="com.esri.geoevent.adapter.inbound/Flight/10.5.0" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="type" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="ident" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="orig" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="dest" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="aat" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="timeType" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="id" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="pitr" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="facility_hash" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="facility_name" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="synthetic" type="Boolean" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="atcident" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="airline" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="add7279b-982e-468f-b7ef-963843101785" name="FlightAwareFlightPlan" owner="com.esri.geoevent.adapter.inbound/Flight/10.5.0" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="type" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="ident" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="status" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="orig" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="dest" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="fdt" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="edt" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="eta" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="ete" type="Long" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="id" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="pitr" type="Long" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="aircrafttype" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="suffix" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="reg" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="speed" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="alt" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="prefix" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="waypoints" type="Group" cardinality="Many">
+                    <fieldDefinitions>
+                        <fieldDefinition name="lat" type="Double" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                        <fieldDefinition name="lon" type="Double" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                        <fieldDefinition name="clock" type="Date" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                        <fieldDefinition name="alt" type="Double" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                        <fieldDefinition name="gs" type="Double" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                        <fieldDefinition name="airspeed_kts" type="Double" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                        <fieldDefinition name="airspeed_mach" type="Double" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                    </fieldDefinitions>
+                </fieldDefinition>
+                <fieldDefinition name="4d_waypoints" type="Group" cardinality="Many">
+                    <fieldDefinitions>
+                        <fieldDefinition name="lat" type="Double" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                        <fieldDefinition name="lon" type="Double" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                        <fieldDefinition name="clock" type="Date" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                        <fieldDefinition name="alt" type="Double" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                        <fieldDefinition name="gs" type="Double" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                        <fieldDefinition name="airspeed_kts" type="Double" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                        <fieldDefinition name="airspeed_mach" type="Double" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                    </fieldDefinitions>
+                </fieldDefinition>
+                <fieldDefinition name="route" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="atcident" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="facility_hash" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="facility_name" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="airline" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="d92a69ce-d073-4b67-8ca5-32e6f86a4049" name="FlightAwareGroundPosition" owner="com.esri.geoevent.adapter.inbound/Flight/10.5.0" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="type" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="ident" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="airport" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="lat" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="lon" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="clock" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="pid" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="updateType" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="pitr" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="air_ground" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="facility_hash" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="facility_name" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="alt" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="gs" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="heading" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="squawk" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="hexid" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="reg" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="aircrafttype" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="manual_aircrafttype" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="track" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="airline" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="d37f2e8e-a281-4686-87a6-d43b3a7fecd5" name="FlightAwareVehiclePosition" owner="com.esri.geoevent.adapter.inbound/Flight/10.5.0" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="type" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="ident" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="airport" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="lat" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="lon" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="clock" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="pid" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="updateType" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="pitr" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="air_ground" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="facility_hash" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="facility_name" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="alt" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="gs" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="heading" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="squawk" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="hexid" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="reg" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="aircrafttype" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="manual_aircrafttype" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="track" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="airline" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="d58cdc30-3222-49db-80fd-780c94e2dfec" name="FlightAwarePosition" owner="com.esri.geoevent.adapter.inbound/Flight/10.5.0" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="type" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="ident" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="lat" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="lon" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="clock" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="id" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="updateType" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="air_ground" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="facility_hash" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="facility_name" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="pitr" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="alt" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="altChange" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="gs" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="heading" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="rp1lat" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="rp1lon" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="rp1alt" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="rp1clock" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="squawk" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="hexid" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="fob" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="oat" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="airspeed_kts" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="airspeed_mach" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="winds" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="eta" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="baro_alt" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="gps_alt" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="atcident" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="airline" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+    </geoEventDefinitions>
+    <tags/>
+    <connectors>
+        <connector accessType="editable" label="Receive FlightAware" name="receive-flightaware-connector" type="inbound">
+            <adapter uri="com.esri.geoevent.adapter.inbound/FlightAware/10.5.0"/>
+            <defaultName>flightaware-in</defaultName>
+            <description>Connects to the FlightAware API and receives worldwide flight tracking feeds.</description>
+            <properties>
+                <advanced/>
+                <hidden/>
+                <shown>
+                    <property default="firehose.flightaware.com" label="Host" name="host" source="transport"/>
+                    <property default="1501" label="Port" name="port" source="transport"/>
+                    <property default="" label="Username" name="username" source="transport"/>
+                    <property default="" label="Password" name="password" source="transport"/>
+                    <property default="true" label="Flight Position Data" name="flightPosition" source="transport"/>
+                    <property default="false" label="Flight Plan Data" name="flightPlan" source="transport"/>
+                    <property default="false" label="Departure Data" name="departure" source="transport"/>
+                    <property default="false" label="Arrival Data" name="arrival" source="transport"/>
+                    <property default="false" label="Cancellation Data" name="cancellation" source="transport"/>
+                    <property default="false" label="Ground Position Data" name="ground_position" source="transport"/>
+                    <property default="false" label="Vehicle Position Data" name="vehicle_position" source="transport"/>
+                    <property default="false" label="Offblock Data" name="offblock" source="transport"/>
+                    <property default="false" label="Onblock Data" name="onblock" source="transport"/>
+                    <property default="live" label="Mode" name="mode" source="transport"/>
+                    <property default="" label="Point in Time Recovery (Epoch)" name="pitrEpoch" source="transport"/>
+                    <property default="" label="Start Time Range (Epoch)" name="rangeEpochStart" source="transport"/>
+                    <property default="" label="End Time Range (Epoch)" name="rangeEpochEnd" source="transport"/>
+                    <property default="" label="Airline Filter" name="filter" source="transport"/>
+                    <property default="" label="Flight Identifications" name="idents" source="transport"/>
+                    <property default="" label="Version" name="version" source="transport"/>
+                    <property default="" label="Format" name="format" source="transport"/>
+                    <property default="" label="Area of Interests" name="aois" source="transport"/>
+                    <property default="" label="Airport Filter" name="airport_filter" source="transport"/>
+                    <property default="" label="Compression" name="compression" source="transport"/>
+                </shown>
+            </properties>
+            <transport uri="com.esri.geoevent.transport.inbound/FlightAware/10.5.0"/>
+        </connector>
+    </connectors>
+    <folderDataStores>
+        <folderDataStore accessType="editable" canRead="true" canWrite="true" exists="true" label="Data" name="47df1f15-538c-46b7-8016-3297c9a13b1b" path="D:\data">
+            <details></details>
+        </folderDataStore>
+    </folderDataStores>
+</template>

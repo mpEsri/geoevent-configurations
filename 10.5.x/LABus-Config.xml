@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template key="+1ZAApp0KbB39eQ1Njzu8A==" productVersion="10.5.0">
+    <geoEventServices>
+        <geoEventService name="21f16abf-a93e-4070-85fa-aa27bbfbde58" label="LA-Bus-Service" description="LA-Bus-Service" lineStyle="Diagonal" runningState="STARTED" statusDetails="">
+            <inputs>
+                <input ref="9e7770c8-a786-40f5-878d-8cfa86f5be4e" label="json-iterative-in" left="74" top="270" width="105" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="278d5a31-a417-4198-86c3-6a38c6ee6319" label="labus-file-out" left="516" top="194" width="88" height="40"/>
+                <output ref="fe97787e-b828-40c8-873a-760089969c98" label="LABus-stream-service-out" left="492" top="321" width="200" height="40"/>
+            </outputs>
+            <nodes>
+                <node name="e20219a7-b75e-405d-8c91-049ddec07cce" label="LABus-Filter" left="272" top="362" width="107" height="71">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="$DEFINITION_NAME" operator="=" value="LABusVehicles-w-ReceivedTime"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+                <node name="c1271754-ea21-4d30-8551-55d80f373b64" label="LABusReceivedTimeFM" left="253" top="267" width="145" height="40">
+                    <processor uri="com.esri.ges.processor/FieldMapper/10.5.0">
+                        <properties>
+                            <property name="inputFields" type="String">seconds_since_report,run_id,longitude,heading,route_id,predictable,latitude,id,position,$RECEIVED_TIME</property>
+                            <property name="outputFields" type="String">seconds_since_report,run_id,longitude,heading,route_id,predictable,latitude,id,position,received_time</property>
+                            <property name="inputGeoEventDefinition" type="GeoEventDefinition">LABusVehicles</property>
+                            <property name="outputGeoEventDefinition" type="GeoEventDefinition">LABusVehicles-w-ReceivedTime</property>
+                        </properties>
+                    </processor>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="e20219a7-b75e-405d-8c91-049ddec07cce" label="LABus-Filter">
+                    <to ref="fe97787e-b828-40c8-873a-760089969c98" label="LABus-stream-service-out"/>
+                </from>
+                <from ref="9e7770c8-a786-40f5-878d-8cfa86f5be4e" label="json-iterative-in">
+                    <to ref="c1271754-ea21-4d30-8551-55d80f373b64" label="LABusReceivedTimeFM"/>
+                </from>
+                <from ref="c1271754-ea21-4d30-8551-55d80f373b64" label="LABusReceivedTimeFM">
+                    <to ref="fe97787e-b828-40c8-873a-760089969c98" label="LABus-stream-service-out"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+    </geoEventServices>
+    <inputs>
+        <input clusterCommand="START" connector="json-iterative-inbound" connectorLabel="JSON over Iterative Transport Inbound" hostName="WIN-C69CU5GLS79" label="json-iterative-in" name="9e7770c8-a786-40f5-878d-8cfa86f5be4e" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.inbound/Generic-JSON/10.5.0">
+                <properties>
+                    <property name="YGeometryField" type="String">latitude</property>
+                    <property name="CreateGeoEventDefinition" type="Boolean">false</property>
+                    <property name="isLearningMode" type="Boolean">false</property>
+                    <property name="ExistingGeoEventDefinitionName" type="GeoEventDefinition">LABusVehicles</property>
+                    <property name="ZGeometryField" type="String"></property>
+                    <property name="NewGeoEventDefinitionName" type="String">LABusVehicles</property>
+                    <property name="asGeoJson" type="Boolean">false</property>
+                    <property name="WKTextGeometryField" type="String"></property>
+                    <property name="BuildGeometryFromFields" type="Boolean">true</property>
+                    <property name="CustomDateFormat" type="String"></property>
+                    <property name="WKIDGeometryField" type="String"></property>
+                    <property name="JsonObjectName" type="String">items</property>
+                    <property name="XGeometryField" type="String">longitude</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>7ae97171-5acf-4a50-8cc7-da92e996c93a</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.geoevent.transport.inbound/Iterative-Transport/10.5.0">
+                <properties>
+                    <property name="acceptableMimeTypesServerMode" type="String"></property>
+                    <property name="acceptableMimeTypesClientMode" type="String"></property>
+                    <property name="httpMethod" type="String">GET</property>
+                    <property name="collectionName" type="String">items</property>
+                    <property name="frequency" type="Integer">5</property>
+                    <property name="mode" type="String">CLIENT</property>
+                    <property name="honorLastModified" type="Boolean">true</property>
+                    <property name="collectionRequestInterval" type="Integer">120</property>
+                    <property name="useClientURLProxy" type="Boolean">false</property>
+                    <property name="clientParameters" type="String"></property>
+                    <property name="itemUrlTemplate" type="String">http://api.metro.net/agencies/lametro/routes/{id}/vehicles/</property>
+                    <property name="itemRequestInterval" type="Integer">100</property>
+                    <property name="headers" type="String"></property>
+                    <property name="getRequestRawDataFieldName" type="String"></property>
+                    <property name="clientURL" type="String">http://api.metro.net/agencies/lametro/routes/</property>
+                    <property name="httpAppendToEnd" type="String"></property>
+                    <property name="clientPostBody" type="String"></property>
+                    <property name="postContentType" type="String"></property>
+                    <property name="httpTimeoutValue" type="Integer">30</property>
+                    <property name="clientURLProxy" type="String"></property>
+                    <property name="useLongPolling" type="Boolean">false</property>
+                    <property name="clientPostFrom" type="String">TEXT</property>
+                    <property name="clientPostParameters" type="String">name:value</property>
+                    <property name="collectionUrl" type="String">http://api.metro.net/agencies/lametro/routes/</property>
+                    <property name="getRequestIncludesRaw" type="Boolean">true</property>
+                </properties>
+            </transport>
+        </input>
+    </inputs>
+    <outputs>
+        <output clusterCommand="START" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="LABus-stream-service-out" name="fe97787e-b828-40c8-873a-760089969c98" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.5.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>6956d101-92be-490c-98e3-82ff254252d4</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.5.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">LABusVehicles-w-ReceivedTime</property>
+                    <property name="serviceName" type="ArcGISStreamService">LABus</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-csv-file-log" connectorLabel="Write to a CSV File" label="labus-file-out" name="278d5a31-a417-4198-86c3-6a38c6ee6319" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/Text/10.5.0">
+                <properties>
+                    <property name="LocaleForNumberFormatter" type="String"></property>
+                    <property name="CustomDateFormat" type="String"></property>
+                    <property name="MessageSeparator" type="String">\n</property>
+                    <property name="mimeType" type="String">text/plain</property>
+                    <property name="CustomDateFormatType" type="String"></property>
+                    <property name="AttributeSeparator" type="String">,</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/File/10.5.0">
+                <properties>
+                    <property name="outputFolderDataStore" type="FolderDataStore">47df1f15-538c-46b7-8016-3297c9a13b1b</property>
+                    <property name="outputFilesShouldExpire" type="String">Archive</property>
+                    <property name="outputFileFooter" type="String"></property>
+                    <property name="outputFileExtension" type="String">csv</property>
+                    <property name="outputFileSizeLimitValue" type="Integer">1024</property>
+                    <property name="outputBaseFileName" type="String">labus</property>
+                    <property name="outputFileEventSeparator" type="String"></property>
+                    <property name="outputFileHeader" type="String"></property>
+                    <property name="outputExpirationValueInMinutes" type="Integer">4320</property>
+                    <property name="outputFileFrequency" type="String">Hourly</property>
+                    <property name="outputDirectory" type="String">LABus</property>
+                    <property name="outputArchiveLocation" type="String">LABus-Archive</property>
+                    <property name="outputFileSizeLimitMethod" type="String">By Size</property>
+                    <property name="outputArchiveDataStore" type="FolderDataStore">47df1f15-538c-46b7-8016-3297c9a13b1b</property>
+                </properties>
+            </transport>
+        </output>
+    </outputs>
+    <geoEventDefinitions>
+        <geoEventDefinition guid="7ae97171-5acf-4a50-8cc7-da92e996c93a" name="LABusVehicles" owner="auto-generated/com.esri.ges.adapter.inbound.Generic-JSON/10.5.0" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="seconds_since_report" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="run_id" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="longitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="heading" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="route_id" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="predictable" type="Boolean" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="latitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="id" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="position" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="6956d101-92be-490c-98e3-82ff254252d4" name="LABusVehicles-w-ReceivedTime" owner="siteadmin" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="seconds_since_report" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="run_id" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="longitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="heading" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="route_id" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="predictable" type="Boolean" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="latitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="id" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="position" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="received_time" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+    </geoEventDefinitions>
+    <tags/>
+    <connectors>
+        <connector accessType="editable" label="JSON over Iterative Transport Inbound" name="json-iterative-inbound" type="inbound">
+            <adapter uri="com.esri.ges.adapter.inbound/Generic-JSON/10.5.0"/>
+            <defaultName>json-iterative-in</defaultName>
+            <description>JSON over Iterative Transport Inbound Connector</description>
+            <properties>
+                <advanced/>
+                <hidden/>
+                <shown>
+                    <property label="JSON Object Name" name="JsonObjectName" source="adapter"/>
+                    <property default="true" label="Create GeoEvent Definition" name="CreateGeoEventDefinition" source="adapter"/>
+                    <property label="GeoEvent Definition Name (Existing)" name="ExistingGeoEventDefinitionName" source="adapter"/>
+                    <property default="NewFeatureGeoEventDef" label="GeoEvent Definition Name (New)" name="NewGeoEventDefinitionName" source="adapter"/>
+                    <property label="Expected Date Format" name="CustomDateFormat" source="adapter"/>
+                    <property default="false" label="Build Geometry From Fields" name="BuildGeometryFromFields" source="adapter"/>
+                    <property label="X Geometry Field" name="XGeometryField" source="adapter"/>
+                    <property label="Y Geometry Field" name="YGeometryField" source="adapter"/>
+                    <property label="Z Geometry Field" name="ZGeometryField" source="adapter"/>
+                    <property label="wkid Geometry Field" name="WKIDGeometryField" source="adapter"/>
+                    <property label="Well Known Text Geometry Field" name="WKTextGeometryField" source="adapter"/>
+                    <property default="false" label="Learning Mode" name="isLearningMode" source="adapter"/>
+                    <property default="false" label="As GeoJson" name="asGeoJson" source="adapter"/>
+                    <property default="items" label="Collection Name" name="collectionName" source="transport"/>
+                    <property label="Collection URL" name="collectionUrl" source="transport"/>
+                    <property label="Item URL Template" name="itemUrlTemplate" source="transport"/>
+                    <property default="60" label="Collection Request Interval" name="collectionRequestInterval" source="transport"/>
+                    <property default="10" label="Item Request Interval" name="itemRequestInterval" source="transport"/>
+                    <property default="CLIENT" label="Mode" name="mode" source="transport"/>
+                    <property label="Acceptable MIME Types (Server Mode)" name="acceptableMimeTypesServerMode" source="transport"/>
+                    <property label="URL" name="clientURL" source="transport"/>
+                    <property default="false" label="Use URL Proxy" name="useClientURLProxy" source="transport"/>
+                    <property label="URL Proxy" name="clientURLProxy" source="transport"/>
+                    <property label="Parameters" name="clientParameters" source="transport"/>
+                    <property default="GET" label="HTTP Method" name="httpMethod" source="transport"/>
+                    <property default="TEXT" label="Post/Put From" name="clientPostFrom" source="transport"/>
+                    <property default="name:value" label="Post/Put Parameters" name="clientPostParameters" source="transport"/>
+                    <property label="Content Body" name="clientPostBody" source="transport"/>
+                    <property label="Post/Put body MIME Type" name="postContentType" source="transport"/>
+                    <property default="name:value" label="Header Parameter Name:Value List" name="headers" source="transport"/>
+                    <property label="Acceptable MIME Types (Client Mode)" name="acceptableMimeTypesClientMode" source="transport"/>
+                    <property default="false" label="Use Long Polling" name="useLongPolling" source="transport"/>
+                    <property default="5" label="Frequency (in seconds)" name="frequency" source="transport"/>
+                    <property default="true" label="Receive New Data Only" name="honorLastModified" source="transport"/>
+                    <property default="30" label="HTTP Timeout (in seconds)" name="httpTimeoutValue" source="transport"/>
+                    <property label="Append to the End of Payload" name="httpAppendToEnd" source="transport"/>
+                    <property default="true" label="Get Request Contains Raw Data" name="getRequestIncludesRaw" source="transport"/>
+                    <property label="Parameter Name for the Raw Data" name="getRequestRawDataFieldName" source="transport"/>
+                </shown>
+            </properties>
+            <transport uri="com.esri.geoevent.transport.inbound/Iterative-Transport/10.5.0"/>
+        </connector>
+    </connectors>
+    <folderDataStores>
+        <folderDataStore accessType="editable" canRead="true" canWrite="true" exists="true" label="Data" name="47df1f15-538c-46b7-8016-3297c9a13b1b" path="D:\data">
+            <details></details>
+        </folderDataStore>
+    </folderDataStores>
+</template>
