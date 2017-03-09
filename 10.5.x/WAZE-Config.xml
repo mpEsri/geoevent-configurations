@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template key="+1ZAApp0KbB39eQ1Njzu8A==" productVersion="10.5.0">
+    <geoEventServices>
+        <geoEventService name="d104969b-08db-4cba-8d24-e6c870303f46" label="Waze-Alert" description="Waze Alerts" lineStyle="Diagonal" runningState="STARTED" statusDetails="">
+            <inputs>
+                <input ref="4481f7af-c3d6-4d88-8f2f-584a87bbcabb" label="waze-in" left="82" top="182" width="60" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="08e33c24-9813-4a18-855b-706ce260f96d" label="waze-alert-stream-service-out" left="564" top="187" width="200" height="40"/>
+                <output ref="6b7ceba3-249a-4543-8040-f7959baf5383" label="waze-alert-bds-out" left="610" top="314" width="117" height="40"/>
+            </outputs>
+            <nodes>
+                <node name="482daced-03d6-4f32-8059-63276485b46e" label="FM" left="413" top="168" width="60" height="54">
+                    <processor uri="com.esri.ges.processor/FieldMapper/10.5.0">
+                        <properties>
+                            <property name="inputFields" type="String">country,imageId,city,reportRating,confidence,reliability,type,uuid,roadType,magvar,subtype,street,imageUrl,pubMillis,geometry</property>
+                            <property name="outputFields" type="String">country,imageId,city,reportRating,confidence,reliability,type,uuid,roadType,magvar,subtype,street,imageUrl,pubMillis,geometry</property>
+                            <property name="inputGeoEventDefinition" type="GeoEventDefinition">WazeAlert</property>
+                            <property name="outputGeoEventDefinition" type="GeoEventDefinition">WazeAlert-Flat</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="9567ee64-f609-4b75-8528-d03b409b7c98" label="Waze-Alert" left="244" top="173" width="99" height="62">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="$DEFINITION_NAME" operator="=" value="WazeAlert"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="4481f7af-c3d6-4d88-8f2f-584a87bbcabb" label="waze-in">
+                    <to ref="9567ee64-f609-4b75-8528-d03b409b7c98" label="Waze-Alert"/>
+                </from>
+                <from ref="482daced-03d6-4f32-8059-63276485b46e" label="FM">
+                    <to ref="08e33c24-9813-4a18-855b-706ce260f96d" label="waze-alert-stream-service-out"/>
+                    <to ref="6b7ceba3-249a-4543-8040-f7959baf5383" label="waze-alert-bds-out"/>
+                </from>
+                <from ref="9567ee64-f609-4b75-8528-d03b409b7c98" label="Waze-Alert">
+                    <to ref="482daced-03d6-4f32-8059-63276485b46e" label="FM"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+        <geoEventService name="d617982a-a34e-407b-8efb-d8c7cfc866b8" label="Waze-Jam" description="Waze Jams" lineStyle="Diagonal" runningState="STARTED" statusDetails="">
+            <inputs>
+                <input ref="4481f7af-c3d6-4d88-8f2f-584a87bbcabb" label="waze-in" left="82" top="182" width="60" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="9fbf2700-95d3-4de8-8644-26037a7239c5" label="waze-jam-stream-service-out" left="683" top="269" width="200" height="40"/>
+                <output ref="63870142-9452-4596-84d0-06dd912297fa" label="waze-jam-bds-out" left="692" top="161" width="113" height="40"/>
+            </outputs>
+            <nodes>
+                <node name="09138335-a65c-4b3b-8030-3e142a824679" label="WazeJamMapper" left="457" top="230" width="103" height="40">
+                    <processor uri="com.esri.ges.processor/FieldMapper/10.5.0">
+                        <properties>
+                            <property name="inputFields" type="String">country,city,level,length,turnType,type,uuid,endNode,speed,blockingAlertUuid,roadType,delay,street,pubMillis,geometry</property>
+                            <property name="outputFields" type="String">country,city,level,length,turnType,type,uuid,endNode,speed,blockingAlertUuid,roadType,delay,street,pubMillis,geometry</property>
+                            <property name="inputGeoEventDefinition" type="GeoEventDefinition">WazeJam</property>
+                            <property name="outputGeoEventDefinition" type="GeoEventDefinition">WazeJam-Flat</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="0ea2024a-280e-4c18-8d0c-6911811381e6" label="WazeJam" left="267" top="195" width="90" height="62">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="$DEFINITION_NAME" operator="=" value="WazeJam"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="4481f7af-c3d6-4d88-8f2f-584a87bbcabb" label="waze-in">
+                    <to ref="0ea2024a-280e-4c18-8d0c-6911811381e6" label="WazeJam"/>
+                </from>
+                <from ref="09138335-a65c-4b3b-8030-3e142a824679" label="WazeJamMapper">
+                    <to ref="9fbf2700-95d3-4de8-8644-26037a7239c5" label="waze-jam-stream-service-out"/>
+                    <to ref="63870142-9452-4596-84d0-06dd912297fa" label="waze-jam-bds-out"/>
+                </from>
+                <from ref="0ea2024a-280e-4c18-8d0c-6911811381e6" label="WazeJam">
+                    <to ref="09138335-a65c-4b3b-8030-3e142a824679" label="WazeJamMapper"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+    </geoEventServices>
+    <inputs>
+        <input clusterCommand="START" connector="receive-waze-connector" connectorLabel="Receive Waze Connected Citizens Program Feed" hostName="WIN-C69CU5GLS79" label="waze-in" name="4481f7af-c3d6-4d88-8f2f-584a87bbcabb" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.geoevent.adapter.inbound/Waze/10.5.0"/>
+            <geoEventDefinitionHistory>
+                <guid>5442c1b3-f751-4bb3-8c15-e1116b278254</guid>
+                <guid>626a43f8-9863-4d9e-85f5-351ca19e752e</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.geoevent.transport.inbound/Waze/10.5.0">
+                <properties>
+                    <property name="acceptableMimeTypesServerMode" type="String"></property>
+                    <property name="serviceURL" type="String">https://na-georss.waze.com/rtserver/web/TGeoRSS</property>
+                    <property name="acceptableMimeTypesClientMode" type="String">application/json</property>
+                    <property name="httpMethod" type="String">GET</property>
+                    <property name="frequency" type="Integer">120</property>
+                    <property name="mode" type="String">CLIENT</property>
+                    <property name="honorLastModified" type="Boolean">true</property>
+                    <property name="useClientURLProxy" type="Boolean">false</property>
+                    <property name="clientParameters" type="String"></property>
+                    <property name="headers" type="String">name:value</property>
+                    <property name="getRequestRawDataFieldName" type="String"></property>
+                    <property name="types" type="String">alerts,traffic</property>
+                    <property name="clientURL" type="String">https://na-georss.waze.com/rtserver/web/TGeoRSS</property>
+                    <property name="httpAppendToEnd" type="String"></property>
+                    <property name="postContentType" type="String">application/x-www-form-urlencoded</property>
+                    <property name="clientPostBody" type="String"></property>
+                    <property name="httpTimeoutValue" type="Integer">30</property>
+                    <property name="useLongPolling" type="Boolean">false</property>
+                    <property name="clientURLProxy" type="String"></property>
+                    <property name="token" type="String">ccp_partner</property>
+                    <property name="clientPostFrom" type="String">TEXT</property>
+                    <property name="clientPostParameters" type="String">name:value</property>
+                    <property name="aoi" type="String">-118.981886,34.37344;-117.763602,34.37344;-117.763602,33.62391;-118.981886,33.62391;-118.981886,34.37344</property>
+                    <property name="getRequestIncludesRaw" type="Boolean">true</property>
+                    <property name="username" type="String">ESRI</property>
+                </properties>
+            </transport>
+        </input>
+    </inputs>
+    <outputs>
+        <output clusterCommand="START" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="waze-jam-stream-service-out" name="9fbf2700-95d3-4de8-8644-26037a7239c5" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.5.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>b74296e1-388a-4366-ae71-3b4e3ca1065f</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.5.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">WazeJam-Flat</property>
+                    <property name="serviceName" type="ArcGISStreamService">WazeJam</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="STOP" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="waze-alert-stream-service-out" name="08e33c24-9813-4a18-855b-706ce260f96d" runningState="STOPPED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.5.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.5.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">WazeAlert-Flat</property>
+                    <property name="serviceName" type="ArcGISStreamService">WazeAlert</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-bds-update" connectorLabel="Update a Feature in an ArcGIS Spatiotemporal Big Data Store" label="waze-jam-bds-out" name="63870142-9452-4596-84d0-06dd912297fa" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/Noop/10.5.0"/>
+            <geoEventDefinitionHistory>
+                <guid>b74296e1-388a-4366-ae71-3b4e3ca1065f</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/BDS/10.5.0">
+                <properties>
+                    <property name="bdsDataSource" type="ArcGISBDSSource">WazeJam</property>
+                    <property name="datastore" type="ArcGISBDSConnection">default</property>
+                    <property name="maximumTransactionSize" type="Integer">1000</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">WazeJam-Flat</property>
+                    <property name="flushInterval" type="Integer">100</property>
+                    <property name="updateField" type="GeoEventDefinitionField">uuid</property>
+                    <property name="append" type="Boolean">false</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-bds-update" connectorLabel="Update a Feature in an ArcGIS Spatiotemporal Big Data Store" label="waze-alert-bds-out" name="6b7ceba3-249a-4543-8040-f7959baf5383" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/Noop/10.5.0"/>
+            <geoEventDefinitionHistory>
+                <guid>5f5631f3-b22f-48e4-9f43-432413bc7974</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/BDS/10.5.0">
+                <properties>
+                    <property name="bdsDataSource" type="ArcGISBDSSource">WazeAlert</property>
+                    <property name="datastore" type="ArcGISBDSConnection">default</property>
+                    <property name="maximumTransactionSize" type="Integer">1000</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">WazeAlert-Flat</property>
+                    <property name="flushInterval" type="Integer">100</property>
+                    <property name="updateField" type="GeoEventDefinitionField">uuid</property>
+                    <property name="append" type="Boolean">false</property>
+                </properties>
+            </transport>
+        </output>
+    </outputs>
+    <geoEventDefinitions>
+        <geoEventDefinition guid="5f5631f3-b22f-48e4-9f43-432413bc7974" name="WazeAlert-Flat" owner="siteadmin" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="country" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="imageId" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="city" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="reportRating" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="confidence" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="reliability" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="type" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="uuid" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="roadType" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="magvar" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="subtype" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="street" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="imageUrl" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="pubMillis" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="b74296e1-388a-4366-ae71-3b4e3ca1065f" name="WazeJam-Flat" owner="siteadmin" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="country" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="city" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="level" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="length" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="turnType" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="type" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="uuid" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="endNode" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="speed" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="blockingAlertUuid" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="roadType" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="delay" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="street" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="pubMillis" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="5442c1b3-f751-4bb3-8c15-e1116b278254" name="WazeAlert" owner="com.esri.geoevent.adapter.inbound/Waze/10.5.0" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="country" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="imageId" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="city" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="reportRating" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="confidence" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="reliability" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="reportDescription" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="type" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="uuid" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="roadType" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="magvar" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="subtype" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="street" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="imageUrl" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="location" type="Group" cardinality="One">
+                    <fieldDefinitions>
+                        <fieldDefinition name="x" type="Double" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                        <fieldDefinition name="y" type="Double" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                    </fieldDefinitions>
+                </fieldDefinition>
+                <fieldDefinition name="pubMillis" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="626a43f8-9863-4d9e-85f5-351ca19e752e" name="WazeJam" owner="com.esri.geoevent.adapter.inbound/Waze/10.5.0" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="country" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="city" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="level" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="line" type="Group" cardinality="Many">
+                    <fieldDefinitions>
+                        <fieldDefinition name="x" type="Double" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                        <fieldDefinition name="y" type="Double" cardinality="One">
+                            <fieldDefinitions/>
+                        </fieldDefinition>
+                    </fieldDefinitions>
+                </fieldDefinition>
+                <fieldDefinition name="length" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="turnType" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="type" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="uuid" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="endNode" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="speed" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="segments" type="String" cardinality="Many">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="blockingAlertUuid" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="roadType" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="delay" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="street" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="pubMillis" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+    </geoEventDefinitions>
+    <tags/>
+    <connectors>
+        <connector accessType="editable" label="Receive Waze Connected Citizens Program Feed" name="receive-waze-connector" type="inbound">
+            <adapter uri="com.esri.geoevent.adapter.inbound/Waze/10.5.0"/>
+            <defaultName>waze-in</defaultName>
+            <description>Connects to the Waze API and receives traffic data from Waze Connected Citizens Program Feeds.</description>
+            <properties>
+                <advanced>
+                    <property label="URL Proxy" name="clientURLProxy" source="transport"/>
+                    <property default="false" label="Use URL Proxy" name="useClientURLProxy" source="transport"/>
+                    <property label="Parameters" name="clientParameters" source="transport"/>
+                </advanced>
+                <hidden>
+                    <property default="CLIENT" label="Mode" name="mode" source="transport"/>
+                    <property default="GET" label="HTTP Method" name="httpMethod" source="transport"/>
+                    <property default="application/x-www-form-urlencoded" label="Post body MIME Type" name="postContentType" source="transport"/>
+                    <property default="application/json" label="Acceptable MIME Types (Client Mode)" name="acceptableMimeTypesClientMode" source="transport"/>
+                    <property label="Content Body" name="clientPostBody" source="transport"/>
+                    <property default="false" label="Use Long Polling" name="useLongPolling" source="transport"/>
+                    <property label="Acceptable MIME Types (Server Mode)" name="acceptableMimeTypesServerMode" source="transport"/>
+                </hidden>
+                <shown>
+                    <property default="https://na-georss.waze.com/rtserver/web/TGeoRSS" label="URL" name="clientURL" source="transport"/>
+                    <property default="" label="Waze CCP Token" name="token" source="transport"/>
+                    <property default="" label="Waze CCP Partner Name" name="username" source="transport"/>
+                    <property default="alerts,traffic" label="Data Types" name="types" source="transport"/>
+                    <property default="-118.981886,34.37344;-117.763602,34.37344;-117.763602,33.62391;-118.981886,33.62391;-118.981886,34.37344" label="Area of Interest" name="aoi" source="transport"/>
+                    <property default="120" label="Frequency (in seconds)" name="frequency" source="transport"/>
+                </shown>
+            </properties>
+            <transport uri="com.esri.geoevent.transport.inbound/Waze/10.5.0"/>
+        </connector>
+    </connectors>
+</template>
