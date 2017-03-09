@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template key="+1ZAApp0KbB39eQ1Njzu8A==" productVersion="10.5.0">
+    <geoEventServices>
+        <geoEventService name="c879d0ba-6752-44b0-8814-1cec839d5c64" label="AirportTraffics" description="AirportTraffics" lineStyle="Diagonal" runningState="STARTED" statusDetails="">
+            <inputs>
+                <input ref="simulation-tcp-text-in" label="simulation-tcp-text-in" left="16" top="194" width="135" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="b30bc6b4-42b6-490b-82d7-145d5db2fd87" label="airporttraffics-stream-service-out" left="493" top="75" width="200" height="50"/>
+                <output ref="b0e80819-4de8-4c17-8a1e-cb8dd9323d64" label="airtraffics-bds-out" left="490" top="206" width="110" height="40"/>
+                <output ref="20612fa6-e646-4249-82ea-f5f170590cc8" label="airporttraffics-hist-bds-out" left="509" top="307" width="200" height="40"/>
+            </outputs>
+            <nodes>
+                <node name="717b3d3f-49ad-43d9-8f60-56c9ef0e4e70" label="AirportTrafficsFT" left="262" top="187" width="130" height="62">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="$DEFINITION_NAME" operator="=" value="AirportTraffics"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="simulation-tcp-text-in" label="simulation-tcp-text-in">
+                    <to ref="717b3d3f-49ad-43d9-8f60-56c9ef0e4e70" label="AirportTrafficsFT"/>
+                </from>
+                <from ref="717b3d3f-49ad-43d9-8f60-56c9ef0e4e70" label="AirportTrafficsFT">
+                    <to ref="b0e80819-4de8-4c17-8a1e-cb8dd9323d64" label="airtraffics-bds-out"/>
+                    <to ref="20612fa6-e646-4249-82ea-f5f170590cc8" label="airporttraffics-hist-bds-out"/>
+                    <to ref="b30bc6b4-42b6-490b-82d7-145d5db2fd87" label="airporttraffics-stream-service-out"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+    </geoEventServices>
+    <inputs>
+        <input clusterCommand="START" connector="esri-in-tcp-text-generictext" connectorLabel="Receive text from a TCP Socket" label="simulation-tcp-text-in" name="simulation-tcp-text-in" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.inbound/Text/10.5.0">
+                <properties>
+                    <property name="CreateFixedGeoEventDefinitions" type="Boolean">false</property>
+                    <property name="YGeometryField" type="String"></property>
+                    <property name="ZGeometryField" type="String"></property>
+                    <property name="MessageSeparator" type="String">\n</property>
+                    <property name="IncomingDataContainsGeoEventDefinition" type="Boolean">true</property>
+                    <property name="CreateUnrecognizedGeoEventDefinitions" type="Boolean">false</property>
+                    <property name="WKTextGeometryField" type="String"></property>
+                    <property name="LocaleForNumberFormatter" type="String"></property>
+                    <property name="BuildGeometryFromFields" type="Boolean">false</property>
+                    <property name="CustomDateFormat" type="String"></property>
+                    <property name="NewFixedGeoEventDefinitionName" type="String"></property>
+                    <property name="WKIDGeometryField" type="String"></property>
+                    <property name="ExistingFixedGeoEventDefinitionName" type="GeoEventDefinition">incident</property>
+                    <property name="XGeometryField" type="String"></property>
+                    <property name="AttributeSeparator" type="String">,</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>de41e610-813c-42a2-9d97-647b4e811056</guid>
+                <guid>4e84814c-70bd-4149-a73f-7a66e18a4374</guid>
+                <guid>24768c50-0ee3-4d17-9fac-e0f78a4c0ec0</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.inbound/TCP/10.5.0">
+                <properties>
+                    <property name="mode" type="String">SERVER</property>
+                    <property name="handshake" type="String"></property>
+                    <property name="port" type="Integer">5566</property>
+                    <property name="host" type="String">localhost</property>
+                    <property name="clientConnectionTimeout" type="Integer">60</property>
+                </properties>
+            </transport>
+        </input>
+    </inputs>
+    <outputs>
+        <output clusterCommand="START" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="airporttraffics-stream-service-out" name="b30bc6b4-42b6-490b-82d7-145d5db2fd87" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.5.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>24768c50-0ee3-4d17-9fac-e0f78a4c0ec0</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.5.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">AirportTraffics</property>
+                    <property name="serviceName" type="ArcGISStreamService">AirportTraffics</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-bds-update" connectorLabel="Update a Feature in an ArcGIS Spatiotemporal Big Data Store" label="airtraffics-bds-out" name="b0e80819-4de8-4c17-8a1e-cb8dd9323d64" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/Noop/10.5.0"/>
+            <geoEventDefinitionHistory>
+                <guid>24768c50-0ee3-4d17-9fac-e0f78a4c0ec0</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/BDS/10.5.0">
+                <properties>
+                    <property name="bdsDataSource" type="ArcGISBDSSource">AirportTraffics</property>
+                    <property name="datastore" type="ArcGISBDSConnection">default</property>
+                    <property name="maximumTransactionSize" type="Integer">1000</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">AirportTraffics</property>
+                    <property name="flushInterval" type="Integer">100</property>
+                    <property name="updateField" type="GeoEventDefinitionField">ACID</property>
+                    <property name="append" type="Boolean">false</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-bds-add" connectorLabel="Add a Feature to an ArcGIS Spatiotemporal Big Data Store" label="airporttraffics-hist-bds-out" name="20612fa6-e646-4249-82ea-f5f170590cc8" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/Noop/10.5.0"/>
+            <geoEventDefinitionHistory>
+                <guid>24768c50-0ee3-4d17-9fac-e0f78a4c0ec0</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/BDS/10.5.0">
+                <properties>
+                    <property name="bdsDataSource" type="ArcGISBDSSource">AirportTrafficsHistorical</property>
+                    <property name="datastore" type="ArcGISBDSConnection">default</property>
+                    <property name="maximumTransactionSize" type="Integer">1000</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">AirportTraffics</property>
+                    <property name="flushInterval" type="Integer">100</property>
+                    <property name="updateField" type="GeoEventDefinitionField">ALTITUDE</property>
+                    <property name="append" type="Boolean">true</property>
+                </properties>
+            </transport>
+        </output>
+    </outputs>
+    <geoEventDefinitions>
+        <geoEventDefinition guid="24768c50-0ee3-4d17-9fac-e0f78a4c0ec0" name="AirportTraffics" owner="siteadmin" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="ALTITUDE" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="AD" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="RWY" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="ACTYPE" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="ACID" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="NEWDATE" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="TA_Date_Va" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="HEADING" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="POINT_X" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="POINT_Y" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="POINT_Z" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+    </geoEventDefinitions>
+    <tags/>
+</template>
