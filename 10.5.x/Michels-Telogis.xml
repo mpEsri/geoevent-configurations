@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template key="nz14d6GpYkJX+j/EddOqoA==" productVersion="10.5.0">
+    <geoEventServices>
+        <geoEventService name="2e57a483-f608-4b0c-8ac6-39a4030f41b9" label="Michels-Telogis" description="" lineStyle="Diagonal" runningState="STARTED" statusDetails="">
+            <inputs>
+                <input ref="fe629239-4879-4568-895a-ac91e17b705f" label="michels-telogis-in" left="210" top="207" width="109" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="0be9a34e-8422-4bd2-81f4-19a5d7a20fc8" label="telogis-file-json-out" left="552" top="129" width="120" height="40"/>
+                <output ref="a5fa2b42-b8e5-49d2-8919-b793f3faefee" label="michels-telogis-stream-service-out" left="550" top="337" width="200" height="50"/>
+                <output ref="308da1ad-e666-4958-88a1-5ce6af996868" label="json-websocket-out" left="513" top="223" width="122" height="40"/>
+            </outputs>
+            <nodes/>
+            <flow>
+                <from ref="fe629239-4879-4568-895a-ac91e17b705f" label="michels-telogis-in">
+                    <to ref="308da1ad-e666-4958-88a1-5ce6af996868" label="json-websocket-out"/>
+                    <to ref="a5fa2b42-b8e5-49d2-8919-b793f3faefee" label="michels-telogis-stream-service-out"/>
+                    <to ref="0be9a34e-8422-4bd2-81f4-19a5d7a20fc8" label="telogis-file-json-out"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+    </geoEventServices>
+    <inputs>
+        <input clusterCommand="STOP" connector="telogis-in" connectorLabel="Receive Telogis" label="michels-telogis-in" name="fe629239-4879-4568-895a-ac91e17b705f" runningState="STOPPED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.geoevent.adapter.inbound/Telogis/10.5.0"/>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.geoevent.transport.inbound/Telogis/10.5.0">
+                <properties>
+                    <property name="acceptableMimeTypesServerMode" type="String"></property>
+                    <property name="acceptableMimeTypesClientMode" type="String">application/json</property>
+                    <property name="httpMethod" type="String">GET</property>
+                    <property name="frequency" type="Integer">30</property>
+                    <property name="mode" type="String">CLIENT</property>
+                    <property name="honorLastModified" type="Boolean">true</property>
+                    <property name="password" type="Password">zgiRITmIU8eFc/CBKAWqAQ==</property>
+                    <property name="useClientURLProxy" type="Boolean">false</property>
+                    <property name="clientParameters" type="String"></property>
+                    <property name="headers" type="String">name:value</property>
+                    <property name="getRequestRawDataFieldName" type="String"></property>
+                    <property name="metaDataDownload" type="Boolean">false</property>
+                    <property name="clientURL" type="String">https://integration.telogis.com</property>
+                    <property name="httpAppendToEnd" type="String"></property>
+                    <property name="postContentType" type="String"></property>
+                    <property name="clientPostBody" type="String"></property>
+                    <property name="httpTimeoutValue" type="Integer">30</property>
+                    <property name="useLongPolling" type="Boolean">false</property>
+                    <property name="customerName" type="String">michels</property>
+                    <property name="clientURLProxy" type="String"></property>
+                    <property name="clientPostFrom" type="String">TEXT</property>
+                    <property name="clientPostParameters" type="String">name:value</property>
+                    <property name="metaDataUpdateInterval" type="Integer">43200</property>
+                    <property name="getRequestIncludesRaw" type="Boolean">true</property>
+                    <property name="username" type="String">apiuser</property>
+                </properties>
+            </transport>
+        </input>
+    </inputs>
+    <outputs>
+        <output clusterCommand="START" connector="esri-out-json-file-log" connectorLabel="Write to a JSON File" label="telogis-file-json-out" name="0be9a34e-8422-4bd2-81f4-19a5d7a20fc8" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/Generic-JSON/10.5.0">
+                <properties>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/File/10.5.0">
+                <properties>
+                    <property name="outputFolderDataStore" type="FolderDataStore">ea82932c-f70d-4d11-8248-edb060506e59</property>
+                    <property name="outputFilesShouldExpire" type="String">Archive</property>
+                    <property name="outputFileExtension" type="String">json</property>
+                    <property name="outputFileSizeLimitValue" type="Integer">2048</property>
+                    <property name="outputFileFooter" type="String">]</property>
+                    <property name="outputBaseFileName" type="String">michels-telogis</property>
+                    <property name="outputFileEventSeparator" type="String">,</property>
+                    <property name="outputExpirationValueInMinutes" type="Integer">4320</property>
+                    <property name="outputFileHeader" type="String">[</property>
+                    <property name="outputFileFrequency" type="String">Hourly</property>
+                    <property name="outputDirectory" type="String">michels</property>
+                    <property name="outputFileSizeLimitMethod" type="String">By Size</property>
+                    <property name="outputArchiveLocation" type="String">michels-archives</property>
+                    <property name="outputArchiveDataStore" type="FolderDataStore">ea82932c-f70d-4d11-8248-edb060506e59</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="json-websocket-out" connectorLabel="Send JSON Over WebSocket Server" label="json-websocket-out" name="308da1ad-e666-4958-88a1-5ce6af996868" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/Generic-JSON/10.5.0">
+                <properties>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">true</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/WebSocket/10.5.0">
+                <properties>
+                    <property name="PATH" type="String">/json</property>
+                    <property name="CLIENT_IDLE_TIMEOUT" type="Integer">600</property>
+                    <property name="MODE" type="String">SERVER</property>
+                    <property name="PROTOCOL" type="String">input</property>
+                    <property name="URI" type="String">ws://localhost:80/ws</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="michels-telogis-stream-service-out" name="a5fa2b42-b8e5-49d2-8919-b793f3faefee" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.5.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.5.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">TelogisUnitMessage</property>
+                    <property name="serviceName" type="ArcGISStreamService">TelogisUnitMessage</property>
+                </properties>
+            </transport>
+        </output>
+    </outputs>
+    <geoEventDefinitions>
+        <geoEventDefinition guid="a91c1655-6cf2-41dd-b4fc-81d61eb1d15f" name="TelogisUnitMessage" owner="com.esri.geoevent.adapter.inbound/Telogis/10.5.0" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="City" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Country" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="County" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="DiagnosticIDs" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="DiagnosticValues" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="DriverId" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="DriverName" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="EmployeeNumber" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="EngineMinutesDelta" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Heading" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="IgnitionOn" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Latitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Longitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="MarkerId" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="MarkerTag" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="OdometerMiles" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="PostCode" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Quality" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="RSSI" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Region" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="SerialNumber" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="SpeedLimitMph" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="SpeedMph" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="StreetName" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="StreetNo" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Time" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="TimeZoneOffsetMinutes" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="UnitId" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="VehicleTag" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Address" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="AddressId" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="AlertId" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="AlertType" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="ConditionId" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="JobId" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="MessageType" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="OffTime" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="OnTime" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="StreetNumber" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="TriggerTime" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+    </geoEventDefinitions>
+    <tags/>
+    <connectors>
+        <connector accessType="editable" label="Receive Telogis" name="telogis-in" type="inbound">
+            <adapter uri="com.esri.geoevent.adapter.inbound/Telogis/10.5.0"/>
+            <defaultName>telogis-in</defaultName>
+            <description>Connects to the Telogis API and receives vehicle tracking feeds.</description>
+            <properties>
+                <advanced>
+                    <property label="URL Proxy" name="clientURLProxy" source="transport"/>
+                    <property default="false" label="Use URL Proxy" name="useClientURLProxy" source="transport"/>
+                    <property default="0" label="Backlog Timespan (minutes)" name="minutesToGetBacklog" source="transport"/>
+                </advanced>
+                <hidden>
+                    <property default="https://integration.telogis.com" label="URL" name="clientURL" source="transport"/>
+                    <property default="CLIENT" label="Mode" name="mode" source="transport"/>
+                    <property default="Get" label="HTTP Method" name="httpMethod" source="transport"/>
+                    <property default="application/json" label="Acceptable MIME Types (Client Mode)" name="acceptableMimeTypesClientMode" source="transport"/>
+                    <property label="Post body MIME Type" name="postContentType" source="transport"/>
+                    <property label="Parameters" name="clientParameters" source="transport"/>
+                    <property label="Content Body" name="clientPostBody" source="transport"/>
+                    <property default="false" label="Use Long Polling" name="useLongPolling" source="transport"/>
+                    <property label="Acceptable MIME Types (Server Mode)" name="acceptableMimeTypesServerMode" source="transport"/>
+                </hidden>
+                <shown>
+                    <property label="Username" name="username" source="transport"/>
+                    <property label="Password" name="password" source="transport"/>
+                    <property label="CustomerName" name="customerName" source="transport"/>
+                    <property default="30" label="Frequency (in seconds)" name="frequency" source="transport"/>
+                    <property default="false" label="Download Meta Data" name="metaDataDownload" source="transport"/>
+                    <property default="43200" label="Meta Data Update Interval (seconds)" name="metaDataUpdateInterval" source="transport"/>
+                </shown>
+            </properties>
+            <transport uri="com.esri.geoevent.transport.inbound/Telogis/10.5.0"/>
+        </connector>
+        <connector accessType="editable" label="Send JSON Over WebSocket Server" name="json-websocket-out" type="outbound">
+            <adapter uri="com.esri.ges.adapter.outbound/Generic-JSON/10.5.0"/>
+            <defaultName>json-websocket-out</defaultName>
+            <description>Send JSON Over WebSocket</description>
+            <properties>
+                <advanced>
+                    <property default="true" label="Formatted JSON" name="prettyJson" source="adapter"/>
+                    <property default="600" label="Idle Timeout" name="CLIENT_IDLE_TIMEOUT" source="transport"/>
+                </advanced>
+                <hidden>
+                    <property default="input" label="Protocol (Client Mode)" name="PROTOCOL" source="transport"/>
+                    <property default="ws://localhost:80/ws" label="Remote server web socket URI (Client Mode)" name="URI" source="transport"/>
+                    <property default="application/json" label="MIME Type" name="mimeType" source="adapter"/>
+                    <property default="SERVER" label="Mode" name="MODE" source="transport"/>
+                </hidden>
+                <shown>
+                    <property default="/json" label="URL Path" name="PATH" source="transport"/>
+                </shown>
+            </properties>
+            <transport uri="com.esri.ges.transport.outbound/WebSocket/10.5.0"/>
+        </connector>
+    </connectors>
+    <folderDataStores>
+        <folderDataStore accessType="editable" canRead="true" canWrite="true" exists="true" label="data" name="ea82932c-f70d-4d11-8248-edb060506e59" path="c:\data\output">
+            <details></details>
+        </folderDataStore>
+    </folderDataStores>
+</template>

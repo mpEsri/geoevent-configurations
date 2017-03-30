@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template productVersion="10.5.0">
+    <geoEventServices>
+        <geoEventService name="b718c24b-4509-4f67-8988-a529c5109fdd" label="http-handler-test" description="" lineStyle="Diagonal" runningState="STARTED" statusDetails="">
+            <inputs>
+                <input ref="b97c8894-043f-400d-8534-be552951bbe9" label="url-poll-in" left="216" top="194" width="62" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="8e860f5f-18bb-49c5-865c-1e189b8f9035" label="tcp-text-out" left="574" top="204" width="77" height="40"/>
+            </outputs>
+            <nodes>
+                <node name="4455a8ba-d677-425e-8ed1-79466f4ab41e" label="test" left="387" top="112" width="60" height="54">
+                    <processor uri="com.esri.geoevent.processor/HttpHandler/10.5.0">
+                        <properties>
+                            <property name="headers" type="String"></property>
+                            <property name="method" type="String">GET</property>
+                            <property name="YGeometryField" type="String">Latitude</property>
+                            <property name="clientURL" type="String">https://peco.api.telogis.com/execute?template=799762581&amp;auth={token}</property>
+                            <property name="CreateGeoEventDefinition" type="Boolean">true</property>
+                            <property name="Mode" type="String">CLIENT</property>
+                            <property name="ExistingGeoEventDefinitionName" type="String">ExistingGeoEventDefinition</property>
+                            <property name="ZGeometryField" type="String"></property>
+                            <property name="responseFormat" type="String">json</property>
+                            <property name="httpMethod" type="String">GET</property>
+                            <property name="NewGeoEventDefinitionName" type="String">PECO-TelogisRESTGen</property>
+                            <property name="body" type="String"></property>
+                            <property name="httpTimeoutValue" type="Integer">5</property>
+                            <property name="frequency" type="Integer">5</property>
+                            <property name="fieldSeparator" type="String">,</property>
+                            <property name="TrackIdField" type="String">Id</property>
+                            <property name="BuildGeometryFromFields" type="Boolean">true</property>
+                            <property name="CustomDateFormat" type="String"></property>
+                            <property name="WKIDGeometryField" type="String">4326</property>
+                            <property name="historicalTimespanSeconds" type="Integer">5</property>
+                            <property name="JsonObjectName" type="String">TableEntry</property>
+                            <property name="XGeometryField" type="String">Longitude</property>
+                            <property name="useEpochMilliseconds" type="Boolean">false</property>
+                        </properties>
+                    </processor>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="4455a8ba-d677-425e-8ed1-79466f4ab41e" label="test">
+                    <to ref="8e860f5f-18bb-49c5-865c-1e189b8f9035" label="tcp-text-out"/>
+                </from>
+                <from ref="b97c8894-043f-400d-8534-be552951bbe9" label="url-poll-in">
+                    <to ref="4455a8ba-d677-425e-8ed1-79466f4ab41e" label="test"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+    </geoEventServices>
+    <inputs>
+        <input clusterCommand="START" connector="esri-external-json-poll" connectorLabel="Poll an External Website for JSON" hostName="COYOTE4" label="url-poll-in" name="b97c8894-043f-400d-8534-be552951bbe9" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.inbound/Generic-JSON/10.5.0">
+                <properties>
+                    <property name="YGeometryField" type="String"></property>
+                    <property name="CreateGeoEventDefinition" type="Boolean">true</property>
+                    <property name="isLearningMode" type="Boolean">false</property>
+                    <property name="ExistingGeoEventDefinitionName" type="GeoEventDefinition">incident</property>
+                    <property name="ZGeometryField" type="String"></property>
+                    <property name="NewGeoEventDefinitionName" type="String">PECO-Telogis-Token</property>
+                    <property name="asGeoJson" type="Boolean">false</property>
+                    <property name="WKTextGeometryField" type="String"></property>
+                    <property name="BuildGeometryFromFields" type="Boolean">false</property>
+                    <property name="CustomDateFormat" type="String"></property>
+                    <property name="WKIDGeometryField" type="String"></property>
+                    <property name="JsonObjectName" type="String"></property>
+                    <property name="XGeometryField" type="String"></property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>422eff1f-63a4-41e7-9260-0731f1ae7937</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.inbound/HTTP/10.5.0">
+                <properties>
+                    <property name="headers" type="String"></property>
+                    <property name="getRequestRawDataFieldName" type="String"></property>
+                    <property name="acceptableMimeTypesServerMode" type="String">text/json,application/json</property>
+                    <property name="clientURL" type="String">https://peco.api.telogis.com/rest/login/peco/apiuser/telogis123</property>
+                    <property name="httpAppendToEnd" type="String"></property>
+                    <property name="clientPostBody" type="String"></property>
+                    <property name="postContentType" type="String"></property>
+                    <property name="acceptableMimeTypesClientMode" type="String">text/json,application/json</property>
+                    <property name="httpMethod" type="String">GET</property>
+                    <property name="httpTimeoutValue" type="Integer">30</property>
+                    <property name="useLongPolling" type="Boolean">false</property>
+                    <property name="clientURLProxy" type="String"></property>
+                    <property name="frequency" type="Integer">60</property>
+                    <property name="mode" type="String">CLIENT</property>
+                    <property name="honorLastModified" type="Boolean">true</property>
+                    <property name="clientPostFrom" type="String">TEXT</property>
+                    <property name="clientPostParameters" type="String"></property>
+                    <property name="useClientURLProxy" type="Boolean">false</property>
+                    <property name="clientParameters" type="String"></property>
+                    <property name="getRequestIncludesRaw" type="Boolean">true</property>
+                </properties>
+            </transport>
+        </input>
+    </inputs>
+    <outputs>
+        <output clusterCommand="START" connector="esri-out-text-tcp-client" connectorLabel="Push Text to an External TCP Socket" label="tcp-text-out" name="8e860f5f-18bb-49c5-865c-1e189b8f9035" runningState="ERROR" statusDetails="Connection refused: connect.  Server is localhost.  Port is 5575." supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/Text/10.5.0">
+                <properties>
+                    <property name="LocaleForNumberFormatter" type="String"></property>
+                    <property name="MessageSeparator" type="String">\n</property>
+                    <property name="CustomDateFormat" type="String"></property>
+                    <property name="mimeType" type="String">text/plain</property>
+                    <property name="CustomDateFormatType" type="String">ISO 8601 Format</property>
+                    <property name="AttributeSeparator" type="String">,</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/TCP/10.5.0">
+                <properties>
+                    <property name="mode" type="String">CLIENT</property>
+                    <property name="port" type="Integer">5575</property>
+                    <property name="host" type="String">localhost</property>
+                    <property name="clientConnectionTimeout" type="Integer">60</property>
+                </properties>
+            </transport>
+        </output>
+    </outputs>
+    <geoEventDefinitions/>
+    <tags/>
+</template>

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template key="nz14d6GpYkJX+j/EddOqoA==" productVersion="10.5.0">
+    <geoEventServices>
+        <geoEventService name="49805ac2-97ef-4dae-80aa-29a7def73a91" label="tmc-deldot" description="" lineStyle="Diagonal" runningState="STARTED" statusDetails="">
+            <inputs>
+                <input ref="a21b45f4-62d1-4980-88bd-ecd573b46d7c" label="deldot-url-poll-in" left="60" top="304" width="103" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="308da1ad-e666-4958-88a1-5ce6af996868" label="json-websocket-out" left="634" top="347" width="122" height="40"/>
+            </outputs>
+            <nodes>
+                <node name="5916e540-26d7-4a9f-86a8-a00b95ef740e" label="ADV-Split" left="496" top="247" width="61" height="72">
+                    <processor uri="com.esri.geoevent.processor/MulticardinalFieldSplitter/10.5.0">
+                        <properties>
+                            <property name="newGeoEventDefinitionName" type="String">deldot-advisory</property>
+                            <property name="fieldToSplit" type="String">advisories</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="e5cf6262-518a-42d4-87d0-b1a53b6da889" label="FR" left="308" top="196" width="60" height="54">
+                    <processor uri="com.esri.ges.processor/FieldReducer/10.5.0">
+                        <properties>
+                            <property name="eventDefinitionName" type="String">tmc-deldot-reduced</property>
+                            <property name="fields" type="String">timestampMS,timestamp</property>
+                        </properties>
+                    </processor>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="5916e540-26d7-4a9f-86a8-a00b95ef740e" label="ADV-Split">
+                    <to ref="308da1ad-e666-4958-88a1-5ce6af996868" label="json-websocket-out"/>
+                </from>
+                <from ref="a21b45f4-62d1-4980-88bd-ecd573b46d7c" label="deldot-url-poll-in">
+                    <to ref="e5cf6262-518a-42d4-87d0-b1a53b6da889" label="FR"/>
+                </from>
+                <from ref="e5cf6262-518a-42d4-87d0-b1a53b6da889" label="FR">
+                    <to ref="5916e540-26d7-4a9f-86a8-a00b95ef740e" label="ADV-Split"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+    </geoEventServices>
+    <inputs>
+        <input clusterCommand="STOP" connector="esri-external-json-poll" connectorLabel="Poll an External Website for JSON" hostName="" label="deldot-url-poll-in" name="a21b45f4-62d1-4980-88bd-ecd573b46d7c" runningState="STOPPED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.inbound/Generic-JSON/10.5.0">
+                <properties>
+                    <property name="YGeometryField" type="String"></property>
+                    <property name="CreateGeoEventDefinition" type="Boolean">true</property>
+                    <property name="isLearningMode" type="Boolean">false</property>
+                    <property name="ExistingGeoEventDefinitionName" type="GeoEventDefinition">AisAidsToNavigationReport</property>
+                    <property name="ZGeometryField" type="String"></property>
+                    <property name="NewGeoEventDefinitionName" type="String">tmc-deldot</property>
+                    <property name="asGeoJson" type="Boolean">false</property>
+                    <property name="WKTextGeometryField" type="String"></property>
+                    <property name="BuildGeometryFromFields" type="Boolean">false</property>
+                    <property name="CustomDateFormat" type="String"></property>
+                    <property name="WKIDGeometryField" type="String"></property>
+                    <property name="JsonObjectName" type="String"></property>
+                    <property name="XGeometryField" type="String"></property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.inbound/HTTP/10.5.0">
+                <properties>
+                    <property name="headers" type="String"></property>
+                    <property name="getRequestRawDataFieldName" type="String"></property>
+                    <property name="acceptableMimeTypesServerMode" type="String">text/json,application/json</property>
+                    <property name="clientURL" type="String">http://tmc.deldot.gov/json/advisory.json</property>
+                    <property name="httpAppendToEnd" type="String"></property>
+                    <property name="clientPostBody" type="String"></property>
+                    <property name="postContentType" type="String"></property>
+                    <property name="acceptableMimeTypesClientMode" type="String">text/json,application/json</property>
+                    <property name="httpMethod" type="String">GET</property>
+                    <property name="httpTimeoutValue" type="Integer">30</property>
+                    <property name="useLongPolling" type="Boolean">false</property>
+                    <property name="clientURLProxy" type="String"></property>
+                    <property name="frequency" type="Integer">15</property>
+                    <property name="mode" type="String">CLIENT</property>
+                    <property name="honorLastModified" type="Boolean">false</property>
+                    <property name="clientPostFrom" type="String">TEXT</property>
+                    <property name="clientPostParameters" type="String"></property>
+                    <property name="useClientURLProxy" type="Boolean">false</property>
+                    <property name="clientParameters" type="String"></property>
+                    <property name="getRequestIncludesRaw" type="Boolean">true</property>
+                </properties>
+            </transport>
+        </input>
+    </inputs>
+    <outputs>
+        <output clusterCommand="START" connector="json-websocket-out" connectorLabel="Send JSON Over WebSocket Server" label="json-websocket-out" name="308da1ad-e666-4958-88a1-5ce6af996868" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/Generic-JSON/10.5.0">
+                <properties>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">true</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>306f7558-6263-423a-9035-8353c4ac5547</guid>
+                <guid>10827e68-0a89-4ad9-b3d7-548df13ac028</guid>
+                <guid>68c4af8b-563e-4d59-97f2-96fb70315bbd</guid>
+                <guid>68c4af8b-563e-4d59-97f2-96fb70315bbd</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/WebSocket/10.5.0">
+                <properties>
+                    <property name="PATH" type="String">/json</property>
+                    <property name="CLIENT_IDLE_TIMEOUT" type="Integer">600</property>
+                    <property name="MODE" type="String">SERVER</property>
+                    <property name="PROTOCOL" type="String">input</property>
+                    <property name="URI" type="String">ws://localhost:80/ws</property>
+                </properties>
+            </transport>
+        </output>
+    </outputs>
+    <geoEventDefinitions>
+        <geoEventDefinition guid="6ceb17f8-1a70-45a0-a845-652a15780b49" name="AisAidsToNavigationReport" owner="com.esri.geoevent.adapter.inbound/aisInputAdapter/10.5.0" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="AISMessageType" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="MID" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="RepIndicator" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="MMSI" type="Integer" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Regional" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Name" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="NameExt" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="UtcSec" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="PositionAcc" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Longitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Latitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="DimBow" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="DimPort" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="DimStarboard" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="DimStern" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="TypeOfEPosFixDev" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Timestamp" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="OffPosInd" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="AtoNStatus" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="RAIMFlag" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="VirtAtoNFlag" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="AssighModeFlag" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="shape" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+    </geoEventDefinitions>
+    <tags/>
+    <connectors>
+        <connector accessType="editable" label="Send JSON Over WebSocket Server" name="json-websocket-out" type="outbound">
+            <adapter uri="com.esri.ges.adapter.outbound/Generic-JSON/10.5.0"/>
+            <defaultName>json-websocket-out</defaultName>
+            <description>Send JSON Over WebSocket</description>
+            <properties>
+                <advanced>
+                    <property default="true" label="Formatted JSON" name="prettyJson" source="adapter"/>
+                    <property default="600" label="Idle Timeout" name="CLIENT_IDLE_TIMEOUT" source="transport"/>
+                </advanced>
+                <hidden>
+                    <property default="input" label="Protocol (Client Mode)" name="PROTOCOL" source="transport"/>
+                    <property default="ws://localhost:80/ws" label="Remote server web socket URI (Client Mode)" name="URI" source="transport"/>
+                    <property default="application/json" label="MIME Type" name="mimeType" source="adapter"/>
+                    <property default="SERVER" label="Mode" name="MODE" source="transport"/>
+                </hidden>
+                <shown>
+                    <property default="/json" label="URL Path" name="PATH" source="transport"/>
+                </shown>
+            </properties>
+            <transport uri="com.esri.ges.transport.outbound/WebSocket/10.5.0"/>
+        </connector>
+    </connectors>
+</template>
