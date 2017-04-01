@@ -1,0 +1,869 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template>
+    <geoEventServices>
+        <geoEventService name="97cb4570-33b1-4df7-87c3-dc2fc6f35e97" label="Esri-Emploee-Info" description="" lineStyle="Diagonal" runningState="STOPPED" statusDetails="">
+            <inputs>
+                <input ref="ec674117-5cf4-4053-8bfc-45c404e3cdf7" label="esri-employee-info-rest-json-in" left="96" top="275" width="200" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="14fd9bb8-9ea4-470b-85e0-166f3a250301" label="Json-WebSocket-Out" left="493" top="293" width="129" height="40"/>
+            </outputs>
+            <nodes/>
+            <flow>
+                <from ref="ec674117-5cf4-4053-8bfc-45c404e3cdf7" label="esri-employee-info-rest-json-in">
+                    <to ref="14fd9bb8-9ea4-470b-85e0-166f3a250301" label="Json-WebSocket-Out"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+        <geoEventService name="5b003a56-bd66-4747-85fc-ef04508e596c" label="EsriCampusGeoFencing" description="Esri Campus GeoFencing" lineStyle="Diagonal" runningState="STARTED" statusDetails="">
+            <inputs>
+                <input ref="d7042676-f72d-4b7b-874a-35725273682a" label="esri-employee-location-rest-json-in" left="16" top="315" width="200" height="50"/>
+                <input ref="054c4abf-0c6d-4db1-829e-56c22b62d731" label="tcp-text-in-5853" left="57" top="27" width="101" height="35"/>
+                <input ref="ec674117-5cf4-4053-8bfc-45c404e3cdf7" label="esri-employee-info-rest-json-in" left="26" top="150" width="200" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="7df293cf-a74d-4675-8198-d755fc5fd65d" label="employee-info-stream-service-out" left="316" top="43" width="200" height="50"/>
+                <output ref="0bf5d098-1da3-4d7f-866b-dfb8160da402" label="esri-employee-tagged-stream-service-out" left="795" top="376" width="199" height="49"/>
+                <output ref="14fd9bb8-9ea4-470b-85e0-166f3a250301" label="Json-WebSocket-Out" left="999" top="23" width="130" height="39"/>
+                <output ref="bac6001e-2e99-42f2-8360-1236627cd779" label="employee-location-stream-service-out" left="364" top="382" width="200" height="50"/>
+                <output ref="40a421c5-48ba-41fb-8d3a-8cedfb29e667" label="esri-geofence-email-text-out" left="1014" top="221" width="200" height="40"/>
+            </outputs>
+            <nodes>
+                <node name="cb1175e3-9793-4381-85dd-ceeb19f0b725" label="FM3" left="835" top="185" width="60" height="54">
+                    <processor uri="com.esri.ges.processor/FieldMapper/10.4.0">
+                        <properties>
+                            <property name="inputFields" type="String">EmployeeId,Status,Note,DatetimeStamp,Longitude,Latitude,Altitude,Phone,SMSemail,geometry,GeoTags</property>
+                            <property name="outputFields" type="String">EmployeeId,Status,Note,DatetimeStamp,Longitude,Latitude,Altitude,Phone,SMSemail,geometry,GeoTags</property>
+                            <property name="inputGeoEventDefinition" type="GeoEventDefinition">IsAtGate</property>
+                            <property name="outputGeoEventDefinition" type="GeoEventDefinition">EsriGeoFence-Result</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="a6d9ba49-af35-45bb-8e3d-65564a7c1801" label="HasTagValue" left="392" top="225" width="111" height="61">
+                    <filter>
+                        <logicalCondition operator="NOT">
+                            <attributeCondition operand="GeoTags" operator="ISNULL"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+                <node name="1ee7d04f-0d97-4758-8e15-185e989865fb" label="FM2" left="827" top="83" width="60" height="54">
+                    <processor uri="com.esri.ges.processor/FieldMapper/10.4.0">
+                        <properties>
+                            <property name="inputFields" type="String">EmployeeId,Status,Note,DatetimeStamp,Longitude,Latitude,Altitude,Phone,SMSemail,geometry,GeoTags</property>
+                            <property name="outputFields" type="String">EmployeeId,Status,Note,DatetimeStamp,Longitude,Latitude,Altitude,Phone,SMSemail,geometry,GeoTags</property>
+                            <property name="inputGeoEventDefinition" type="GeoEventDefinition">EsriGeoFence</property>
+                            <property name="outputGeoEventDefinition" type="GeoEventDefinition">EsriGeoFence-Result</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="ada1c2a3-72a3-4d98-8c7f-bd61ccccff7d" label="EmployeeAtGate" left="693" top="185" width="87" height="62">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="AtGate" operator="=" value="true"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+                <node name="296c9184-4a05-451d-8288-f0e26b6eb440" label="EmpBuff" left="98" top="471" width="60" height="54">
+                    <processor uri="com.esri.ges.processor/Buffer-Creator/10.4.0">
+                        <properties>
+                            <property name="bufferwkid" type="Integer">102100</property>
+                            <property name="unit" type="String">Meter</property>
+                            <property name="outputGeometryFieldTagged" type="Boolean">false</property>
+                            <property name="inputGeometryField" type="GeoEventField_Geometry">GEOMETRY</property>
+                            <property name="outputGeometryField" type="String"></property>
+                            <property name="bufferDistance" type="String">30</property>
+                            <property name="replaceGeometry" type="Boolean">true</property>
+                            <property name="outputGEDName" type="String"></property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="5ceaf388-0e13-4c20-8233-367c6b97e025" label="FM3(1)" left="595" top="305" width="60" height="54">
+                    <processor uri="com.esri.ges.processor/FieldMapper/10.4.0">
+                        <properties>
+                            <property name="inputFields" type="String">EmployeeId,Status,Note,DatetimeStamp,Longitude,Latitude,Altitude,Phone,SMSemail,geometry,GeoTags</property>
+                            <property name="outputFields" type="String">EmployeeId,Status,Note,DatetimeStamp,Longitude,Latitude,Altitude,Phone,SMSemail,geometry,GeoTags</property>
+                            <property name="inputGeoEventDefinition" type="GeoEventDefinition">EsriGeoFence</property>
+                            <property name="outputGeoEventDefinition" type="GeoEventDefinition">EsriGeoFence-Result</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="985d2a90-7e67-4f9c-8f16-f1f85466c2a2" label="Tagger" left="269" top="229" width="79" height="46">
+                    <processor uri="com.esri.ges.processor/GeoTagger/10.4.0">
+                        <properties>
+                            <property name="geofence" type="String">.*/.*</property>
+                            <property name="useCategory" type="Boolean">true</property>
+                            <property name="spatialOperator" type="String">ENTER_ANY</property>
+                            <property name="geotagEventDefinitionName" type="String">EsriGeoFence</property>
+                            <property name="geotagFieldType" type="String">DelimitedValue</property>
+                            <property name="geometryFieldName" type="String">GEOMETRY</property>
+                            <property name="geotagFieldName" type="String">GeoTags</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="92a4ec68-df68-46ff-82b9-de8d14f62f13" label="AtGate" left="564" top="204" width="60" height="54">
+                    <processor uri="com.esri.ges.processor/FieldCalculator/10.4.0">
+                        <properties>
+                            <property name="existingFieldName" type="String"></property>
+                            <property name="expression" type="String">indexOf(GeoTags, 'EsriGates', 0) &gt;= 0</property>
+                            <property name="newGeoEventDefinitionName" type="String">IsAtGate</property>
+                            <property name="resultDestination" type="String">New Field</property>
+                            <property name="newFieldTag" type="String"></property>
+                            <property name="newFieldType" type="String">Boolean</property>
+                            <property name="newFieldName" type="String">AtGate</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="c7c69d26-1441-4559-8093-b7fa5e45d43b" label="IsCafe" left="552" top="65" width="111" height="61">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="GeoTags" operator="MATCHES" value="EsriCafe/Cafe"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="cb1175e3-9793-4381-85dd-ceeb19f0b725" label="FM3">
+                    <to ref="14fd9bb8-9ea4-470b-85e0-166f3a250301" label="Json-WebSocket-Out"/>
+                    <to ref="40a421c5-48ba-41fb-8d3a-8cedfb29e667" label="esri-geofence-email-text-out"/>
+                </from>
+                <from ref="d7042676-f72d-4b7b-874a-35725273682a" label="esri-employee-location-rest-json-in">
+                    <to ref="985d2a90-7e67-4f9c-8f16-f1f85466c2a2" label="Tagger"/>
+                    <to ref="bac6001e-2e99-42f2-8360-1236627cd779" label="employee-location-stream-service-out"/>
+                </from>
+                <from ref="a6d9ba49-af35-45bb-8e3d-65564a7c1801" label="HasTagValue">
+                    <to ref="c7c69d26-1441-4559-8093-b7fa5e45d43b" label="IsCafe"/>
+                    <to ref="92a4ec68-df68-46ff-82b9-de8d14f62f13" label="AtGate"/>
+                    <to ref="5ceaf388-0e13-4c20-8233-367c6b97e025" label="FM3(1)"/>
+                </from>
+                <from ref="054c4abf-0c6d-4db1-829e-56c22b62d731" label="tcp-text-in-5853">
+                    <to ref="985d2a90-7e67-4f9c-8f16-f1f85466c2a2" label="Tagger"/>
+                    <to ref="7df293cf-a74d-4675-8198-d755fc5fd65d" label="employee-info-stream-service-out"/>
+                </from>
+                <from ref="1ee7d04f-0d97-4758-8e15-185e989865fb" label="FM2">
+                    <to ref="14fd9bb8-9ea4-470b-85e0-166f3a250301" label="Json-WebSocket-Out"/>
+                    <to ref="40a421c5-48ba-41fb-8d3a-8cedfb29e667" label="esri-geofence-email-text-out"/>
+                </from>
+                <from ref="ada1c2a3-72a3-4d98-8c7f-bd61ccccff7d" label="EmployeeAtGate">
+                    <to ref="cb1175e3-9793-4381-85dd-ceeb19f0b725" label="FM3"/>
+                </from>
+                <from ref="5ceaf388-0e13-4c20-8233-367c6b97e025" label="FM3(1)">
+                    <to ref="0bf5d098-1da3-4d7f-866b-dfb8160da402" label="esri-employee-tagged-stream-service-out"/>
+                </from>
+                <from ref="ec674117-5cf4-4053-8bfc-45c404e3cdf7" label="esri-employee-info-rest-json-in">
+                    <to ref="985d2a90-7e67-4f9c-8f16-f1f85466c2a2" label="Tagger"/>
+                    <to ref="7df293cf-a74d-4675-8198-d755fc5fd65d" label="employee-info-stream-service-out"/>
+                </from>
+                <from ref="985d2a90-7e67-4f9c-8f16-f1f85466c2a2" label="Tagger">
+                    <to ref="a6d9ba49-af35-45bb-8e3d-65564a7c1801" label="HasTagValue"/>
+                </from>
+                <from ref="92a4ec68-df68-46ff-82b9-de8d14f62f13" label="AtGate">
+                    <to ref="ada1c2a3-72a3-4d98-8c7f-bd61ccccff7d" label="EmployeeAtGate"/>
+                </from>
+                <from ref="c7c69d26-1441-4559-8093-b7fa5e45d43b" label="IsCafe">
+                    <to ref="1ee7d04f-0d97-4758-8e15-185e989865fb" label="FM2"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+        <geoEventService name="245cd6b6-a688-461c-87d6-aadc8f565928" label="EsriCafeBuffer" description="" lineStyle="Diagonal" runningState="STARTED" statusDetails="">
+            <inputs>
+                <input ref="0d4bacc1-1309-4a8f-88de-022b311088cf" label="esri-cafe-fs-poll-in" left="232" top="293" width="111" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="207d4dde-9ecf-4caa-83ff-3fc869286a42" label="esri-cafe-buffer-stream-service-out-copy" left="703" top="300" width="200" height="50"/>
+            </outputs>
+            <nodes>
+                <node name="92d8eec2-9d79-4163-8108-5de2c54f6044" label="CafeBuffer" left="496" top="295" width="69" height="54">
+                    <processor uri="com.esri.ges.processor/Buffer-Creator/10.4.0">
+                        <properties>
+                            <property name="bufferwkid" type="Integer">102100</property>
+                            <property name="unit" type="String">Meter</property>
+                            <property name="outputGeometryFieldTagged" type="Boolean">false</property>
+                            <property name="inputGeometryField" type="GeoEventField_Geometry">GEOMETRY</property>
+                            <property name="outputGeometryField" type="String"></property>
+                            <property name="bufferDistance" type="String">18</property>
+                            <property name="replaceGeometry" type="Boolean">true</property>
+                            <property name="outputGEDName" type="String"></property>
+                        </properties>
+                    </processor>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="0d4bacc1-1309-4a8f-88de-022b311088cf" label="esri-cafe-fs-poll-in">
+                    <to ref="92d8eec2-9d79-4163-8108-5de2c54f6044" label="CafeBuffer"/>
+                </from>
+                <from ref="92d8eec2-9d79-4163-8108-5de2c54f6044" label="CafeBuffer">
+                    <to ref="207d4dde-9ecf-4caa-83ff-3fc869286a42" label="esri-cafe-buffer-stream-service-out-copy"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+        <geoEventService name="3ccf7851-44a7-4307-8a23-48a853bd802e" label="EsriGateBuffer" description="" lineStyle="Diagonal" runningState="STARTED" statusDetails="">
+            <inputs>
+                <input ref="11586002-fbeb-41f8-8bad-fa0312c361b1" label="esri-gate-fs-poll-in" left="235" top="302" width="113" height="40"/>
+            </inputs>
+            <outputs>
+                <output ref="04d038a5-bf5e-4022-8fac-e993cf789bbd" label="esri-gate-buffer-stream-service-out" left="721" top="308" width="200" height="50"/>
+            </outputs>
+            <nodes>
+                <node name="92d8eec2-9d79-4163-8108-5de2c54f6044" label="GateBuffer" left="496" top="295" width="69" height="54">
+                    <processor uri="com.esri.ges.processor/Buffer-Creator/10.4.0">
+                        <properties>
+                            <property name="bufferwkid" type="Integer">102100</property>
+                            <property name="unit" type="String">Meter</property>
+                            <property name="outputGeometryFieldTagged" type="Boolean">false</property>
+                            <property name="inputGeometryField" type="GeoEventField_Geometry">GEOMETRY</property>
+                            <property name="outputGeometryField" type="String"></property>
+                            <property name="bufferDistance" type="String">20</property>
+                            <property name="replaceGeometry" type="Boolean">true</property>
+                            <property name="outputGEDName" type="String"></property>
+                        </properties>
+                    </processor>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="11586002-fbeb-41f8-8bad-fa0312c361b1" label="esri-gate-fs-poll-in">
+                    <to ref="92d8eec2-9d79-4163-8108-5de2c54f6044" label="GateBuffer"/>
+                </from>
+                <from ref="92d8eec2-9d79-4163-8108-5de2c54f6044" label="GateBuffer">
+                    <to ref="04d038a5-bf5e-4022-8fac-e993cf789bbd" label="esri-gate-buffer-stream-service-out"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+    </geoEventServices>
+    <inputs>
+        <input clusterCommand="START" connector="esri-in-tcp-text-generictext" connectorLabel="Receive Text from a TCP Socket" label="tcp-text-in-5853" name="054c4abf-0c6d-4db1-829e-56c22b62d731" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.inbound/Text/10.4.0">
+                <properties>
+                    <property name="CreateFixedGeoEventDefinitions" type="Boolean">false</property>
+                    <property name="YGeometryField" type="String">Latitude</property>
+                    <property name="ZGeometryField" type="String"></property>
+                    <property name="MessageSeparator" type="String">\n</property>
+                    <property name="IncomingDataContainsGeoEventDefinition" type="Boolean">false</property>
+                    <property name="CreateUnrecognizedGeoEventDefinitions" type="Boolean">true</property>
+                    <property name="WKTextGeometryField" type="String"></property>
+                    <property name="LocaleForNumberFormatter" type="String"></property>
+                    <property name="BuildGeometryFromFields" type="Boolean">true</property>
+                    <property name="CustomDateFormat" type="String"></property>
+                    <property name="NewFixedGeoEventDefinitionName" type="String">EsriEmployeeLocation</property>
+                    <property name="WKIDGeometryField" type="String"></property>
+                    <property name="ExistingFixedGeoEventDefinitionName" type="GeoEventDefinition">EsriEmployeeInfo</property>
+                    <property name="XGeometryField" type="String">Longitude</property>
+                    <property name="AttributeSeparator" type="String">,</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.inbound/TCP/10.4.0">
+                <properties>
+                    <property name="mode" type="String">SERVER</property>
+                    <property name="handshake" type="String"></property>
+                    <property name="port" type="Integer">5853</property>
+                    <property name="host" type="String">localhost</property>
+                    <property name="clientConnectionTimeout" type="Integer">60</property>
+                </properties>
+            </transport>
+        </input>
+        <input clusterCommand="STOP" connector="esri-in-poll-feature-service" connectorLabel="Poll an ArcGIS Server for Features" label="esri-gate-fs-poll-in" name="11586002-fbeb-41f8-8bad-fa0312c361b1" runningState="STOPPED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.inbound/JSON/10.4.0">
+                <properties>
+                    <property name="CreateGeoEventDefinition" type="Boolean">true</property>
+                    <property name="ExistingGeoEventDefinitionName" type="GeoEventDefinition">EsriEmployeeLocation</property>
+                    <property name="CustomDateFormat" type="String"></property>
+                    <property name="NewGeoEventDefinitionName" type="String">EsriGates</property>
+                    <property name="DefaultWKID" type="String">4326</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.inbound/FeatureService/10.4.0">
+                <properties>
+                    <property name="serviceType" type="ArcGISServiceType">FeatureServer</property>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="cleanupTimeField" type="ArcGISDateTimeField"></property>
+                    <property name="deletePolledFeatures" type="Boolean">false</property>
+                    <property name="refreshInterval" type="Integer">10000</property>
+                    <property name="datastore" type="ArcGISConnection">ba9ed688-fcb6-405a-8067-2e06e3ed6cc5</property>
+                    <property name="serviceName" type="ArcGISFeatureService">Campus_Viewer_20160919_WFL</property>
+                    <property name="queryDefinition" type="String">1=1</property>
+                    <property name="newFeaturesOnly" type="Boolean">false</property>
+                    <property name="newFeaturesOption" type="String">ObjectID</property>
+                    <property name="layerIndex" type="ArcGISLayer">5</property>
+                </properties>
+            </transport>
+        </input>
+        <input url="http://realtimegis2016.esri.com:6180/geoevent/rest/receiver/esri-employee-location-rest-json-in" clusterCommand="START" connector="esri-receive-json-rest-in" connectorLabel="Receive JSON on a REST Endpoint" label="esri-employee-location-rest-json-in" name="d7042676-f72d-4b7b-874a-35725273682a" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.inbound/Generic-JSON/10.4.0">
+                <properties>
+                    <property name="YGeometryField" type="String">Latitude</property>
+                    <property name="CreateGeoEventDefinition" type="Boolean">false</property>
+                    <property name="isLearningMode" type="Boolean">false</property>
+                    <property name="ZGeometryField" type="String">Altitude</property>
+                    <property name="ExistingGeoEventDefinitionName" type="GeoEventDefinition">EsriEmployeeLocation</property>
+                    <property name="NewGeoEventDefinitionName" type="String"></property>
+                    <property name="WKTextGeometryField" type="String"></property>
+                    <property name="BuildGeometryFromFields" type="Boolean">true</property>
+                    <property name="WKIDGeometryField" type="String"></property>
+                    <property name="CustomDateFormat" type="String"></property>
+                    <property name="JsonObjectName" type="String">EsriEmployeeLocation</property>
+                    <property name="XGeometryField" type="String">Longitude</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.inbound/HTTP/10.4.0">
+                <properties>
+                    <property name="headers" type="String"></property>
+                    <property name="acceptableMimeTypesServerMode" type="String">application/json</property>
+                    <property name="clientURL" type="String"></property>
+                    <property name="httpAppendToEnd" type="String"></property>
+                    <property name="postContentType" type="String"></property>
+                    <property name="clientPostBody" type="String"></property>
+                    <property name="acceptableMimeTypesClientMode" type="String"></property>
+                    <property name="httpMethod" type="String">GET</property>
+                    <property name="httpTimeoutValue" type="Integer">30</property>
+                    <property name="useLongPolling" type="Boolean">false</property>
+                    <property name="clientURLProxy" type="String"></property>
+                    <property name="frequency" type="Integer">5</property>
+                    <property name="mode" type="String">SERVER</property>
+                    <property name="honorLastModified" type="Boolean">true</property>
+                    <property name="clientPostFrom" type="String">TEXT</property>
+                    <property name="clientPostParameters" type="String"></property>
+                    <property name="useClientURLProxy" type="Boolean">false</property>
+                    <property name="clientParameters" type="String"></property>
+                </properties>
+            </transport>
+        </input>
+        <input clusterCommand="STOP" connector="esri-in-poll-feature-service" connectorLabel="Poll an ArcGIS Server for Features" label="esri-cafe-fs-poll-in" name="0d4bacc1-1309-4a8f-88de-022b311088cf" runningState="STOPPED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.inbound/JSON/10.4.0">
+                <properties>
+                    <property name="CreateGeoEventDefinition" type="Boolean">true</property>
+                    <property name="ExistingGeoEventDefinitionName" type="GeoEventDefinition">EsriEmployeeLocation</property>
+                    <property name="CustomDateFormat" type="String"></property>
+                    <property name="NewGeoEventDefinitionName" type="String">EsriCafe</property>
+                    <property name="DefaultWKID" type="String">4326</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.inbound/FeatureService/10.4.0">
+                <properties>
+                    <property name="serviceType" type="ArcGISServiceType">FeatureServer</property>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="cleanupTimeField" type="ArcGISDateTimeField">OPERDATE</property>
+                    <property name="deletePolledFeatures" type="Boolean">false</property>
+                    <property name="refreshInterval" type="Integer">10000</property>
+                    <property name="datastore" type="ArcGISConnection">ba9ed688-fcb6-405a-8067-2e06e3ed6cc5</property>
+                    <property name="serviceName" type="ArcGISFeatureService">Campus_Viewer_20160919_WFL</property>
+                    <property name="queryDefinition" type="String">BUILDINGID='Cafe'</property>
+                    <property name="newFeaturesOnly" type="Boolean">false</property>
+                    <property name="newFeaturesOption" type="String">ObjectID</property>
+                    <property name="layerIndex" type="ArcGISLayer">9</property>
+                </properties>
+            </transport>
+        </input>
+        <input url="http://realtimegis2016.esri.com:6180/geoevent/rest/receiver/esri-employee-info-rest-json-in" clusterCommand="START" connector="esri-receive-json-rest-in" connectorLabel="Receive JSON on a REST Endpoint" label="esri-employee-info-rest-json-in" name="ec674117-5cf4-4053-8bfc-45c404e3cdf7" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.inbound/Generic-JSON/10.4.0">
+                <properties>
+                    <property name="YGeometryField" type="String">Latitude</property>
+                    <property name="CreateGeoEventDefinition" type="Boolean">false</property>
+                    <property name="isLearningMode" type="Boolean">false</property>
+                    <property name="ZGeometryField" type="String">Altitude</property>
+                    <property name="ExistingGeoEventDefinitionName" type="GeoEventDefinition">EsriEmployeeInfo</property>
+                    <property name="NewGeoEventDefinitionName" type="String"></property>
+                    <property name="WKTextGeometryField" type="String"></property>
+                    <property name="BuildGeometryFromFields" type="Boolean">true</property>
+                    <property name="WKIDGeometryField" type="String"></property>
+                    <property name="CustomDateFormat" type="String"></property>
+                    <property name="JsonObjectName" type="String">EsriEmployeeInfo</property>
+                    <property name="XGeometryField" type="String">Longitude</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.inbound/HTTP/10.4.0">
+                <properties>
+                    <property name="headers" type="String"></property>
+                    <property name="acceptableMimeTypesServerMode" type="String">application/json</property>
+                    <property name="clientURL" type="String"></property>
+                    <property name="httpAppendToEnd" type="String"></property>
+                    <property name="postContentType" type="String"></property>
+                    <property name="clientPostBody" type="String"></property>
+                    <property name="acceptableMimeTypesClientMode" type="String"></property>
+                    <property name="httpMethod" type="String">GET</property>
+                    <property name="httpTimeoutValue" type="Integer">30</property>
+                    <property name="useLongPolling" type="Boolean">false</property>
+                    <property name="clientURLProxy" type="String"></property>
+                    <property name="frequency" type="Integer">5</property>
+                    <property name="mode" type="String">SERVER</property>
+                    <property name="honorLastModified" type="Boolean">true</property>
+                    <property name="clientPostFrom" type="String">TEXT</property>
+                    <property name="clientPostParameters" type="String"></property>
+                    <property name="useClientURLProxy" type="Boolean">false</property>
+                    <property name="clientParameters" type="String"></property>
+                </properties>
+            </transport>
+        </input>
+    </inputs>
+    <outputs>
+        <output clusterCommand="START" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="esri-employee-tagged-stream-service-out" name="0bf5d098-1da3-4d7f-866b-dfb8160da402" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.4.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.4.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">EsriGeoFence-Result</property>
+                    <property name="serviceName" type="ArcGISStreamService">EsriGeoFence</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="esri-cafe-buffer-stream-service-out-copy" name="207d4dde-9ecf-4caa-83ff-3fc869286a42" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.4.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.4.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">EsriCafe</property>
+                    <property name="serviceName" type="ArcGISStreamService">EsriCafeBuffer</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="employee-location-stream-service-out" name="bac6001e-2e99-42f2-8360-1236627cd779" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.4.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.4.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">EsriEmployeeLocation</property>
+                    <property name="serviceName" type="ArcGISStreamService">EsriEmployeeLocation</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="employee-info-stream-service-out" name="7df293cf-a74d-4675-8198-d755fc5fd65d" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.4.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.4.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">EsriEmployeeInfo</property>
+                    <property name="serviceName" type="ArcGISStreamService">EsriEmployeeInfo</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="Json-WebSocket-Out" connectorLabel="Json-WebSocket-Out" label="Json-WebSocket-Out" name="14fd9bb8-9ea4-470b-85e0-166f3a250301" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/Generic-JSON/10.4.0">
+                <properties>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">true</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/WebSocket/10.4.0">
+                <properties>
+                    <property name="PATH" type="String">/json</property>
+                    <property name="CLIENT_IDLE_TIMEOUT" type="Integer">600</property>
+                    <property name="MODE" type="String">SERVER</property>
+                    <property name="PROTOCOL" type="String">input</property>
+                    <property name="URI" type="String">ws://localhost:80/ws</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="esri-gate-buffer-stream-service-out" name="04d038a5-bf5e-4022-8fac-e993cf789bbd" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.4.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.4.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">EsriGates</property>
+                    <property name="serviceName" type="ArcGISStreamService">EsriGateBuffer</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-message-email-send" connectorLabel="Send an Email" label="esri-geofence-email-text-out" name="40a421c5-48ba-41fb-8d3a-8cedfb29e667" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/MessageFormatter/10.4.0">
+                <properties>
+                    <property name="textMessage" type="String">Hi ${EmployeeId},
+You are at ${GeoTags} on ${DatetimeStamp}.</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory/>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/SMTP/10.4.0">
+                <properties>
+                    <property name="cc" type="String"></property>
+                    <property name="bcc" type="String"></property>
+                    <property name="subject" type="String">Esri Companion for ${EmployeeId}</property>
+                    <property name="format" type="String">Text</property>
+                    <property name="protocol" type="String">smtp</property>
+                    <property name="password" type="Password">9gy/6+at0AypKseXD9eemA==</property>
+                    <property name="port" type="Integer">587</property>
+                    <property name="host" type="String">smtp.gmail.com</property>
+                    <property name="from" type="String">esri.companion.app@gmail.com</property>
+                    <property name="to" type="String">${SMSemail}</property>
+                    <property name="authentication" type="String">TLS</property>
+                    <property name="username" type="String">esri.companion.app</property>
+                </properties>
+            </transport>
+        </output>
+    </outputs>
+    <geoEventDefinitions>
+        <geoEventDefinition guid="552e5cbf-a200-44a8-a658-be73e0df48b7" name="EsriCafe" owner="auto-generated/com.esri.ges.adapter.inbound.JSON/10.4.0" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="OBJECTID" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="BUILDINGID" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="FACILITYKEY" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="SHORTNAME" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="LONGNAME" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="BLDGAREA" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="FLOORCOUNT" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="BLDGTYPE" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="OPERHOURS" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="OPERDATE" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="ACCESSTYPE" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="CONDITION" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="OWNEDBY" type="Short" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="MAINTBY" type="Short" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="LASTUPDATE" type="Date" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="LASTEDITOR" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="e37d07b7-080a-4fa6-b071-d4d798b83679" name="EsriGates" owner="auto-generated/com.esri.ges.adapter.inbound.JSON/10.4.0" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="OBJECTID" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Entry" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Exit_" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="GateType" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="FacilitiesName" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="GateNumber" type="Short" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Name" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="OpenSchedule" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="GateCode" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="DisplayOnCV" type="Short" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="GateOpenType" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="b55ef8b1-53e5-45ec-9219-cbe99092e4bc" name="EsriEmployeeLocation" owner="auto-generated/com.esri.ges.adapter.inbound.Text/10.4.0" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="EmployeeId" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Status" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Note" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="DatetimeStamp" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Longitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Latitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Altitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="a331922e-2dec-40d8-bd11-219b856b9785" name="EsriGeoFence-Result" owner="siteadmin" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="EmployeeId" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Status" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Note" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="DatetimeStamp" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Longitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Latitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Altitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Phone" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="SMSemail" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="GeoTags" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="0740f0fa-ff2f-4689-a643-dc880f630b80" name="EsriEmployeeInfo" owner="siteadmin" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="EmployeeId" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Status" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Note" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="DatetimeStamp" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Longitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Latitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Altitude" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="Phone" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="SMSemail" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+    </geoEventDefinitions>
+    <tags>
+        <tag>
+            <name>TIME_START</name>
+            <description>The start time of the observation</description>
+            <accessType>editable</accessType>
+            <types>
+                <type>Date</type>
+            </types>
+        </tag>
+        <tag>
+            <name>TRACK_ID</name>
+            <description>The unique id of the entity being Tracked.</description>
+            <accessType>editable</accessType>
+            <types>
+                <type>String</type>
+                <type>Date</type>
+                <type>Double</type>
+                <type>Float</type>
+                <type>Geometry</type>
+                <type>Integer</type>
+                <type>Long</type>
+                <type>Short</type>
+                <type>Boolean</type>
+                <type>Group</type>
+            </types>
+        </tag>
+        <tag>
+            <name>GEOMETRY</name>
+            <description>The point, polygon, or polyline of the observation.</description>
+            <accessType>editable</accessType>
+            <types>
+                <type>Geometry</type>
+            </types>
+        </tag>
+    </tags>
+    <connectors>
+        <connector accessType="editable" label="Json-WebSocket-Out" name="Json-WebSocket-Out" type="outbound">
+            <adapter uri="com.esri.ges.adapter.outbound/Generic-JSON/10.4.1"/>
+            <defaultName>Json-WebSocket-Out</defaultName>
+            <description>Json-WebSocket-Out</description>
+            <properties>
+                <advanced/>
+                <hidden/>
+                <shown>
+                    <property default="application/json" label="MIME Type" name="mimeType" source="adapter"/>
+                    <property default="false" label="Formatted JSON" name="prettyJson" source="adapter"/>
+                    <property default="SERVER" label="Mode" name="MODE" source="transport"/>
+                    <property default="/ws" label="URL Path" name="PATH" source="transport"/>
+                    <property default="ws://localhost:80/ws" label="Remote server web socket URI (Client Mode)" name="URI" source="transport"/>
+                    <property default="input" label="Protocol (Client Mode)" name="PROTOCOL" source="transport"/>
+                    <property default="600" label="Idle Timeout" name="CLIENT_IDLE_TIMEOUT" source="transport"/>
+                </shown>
+            </properties>
+            <transport uri="com.esri.ges.transport.outbound/WebSocket/10.4.1"/>
+        </connector>
+    </connectors>
+    <arcgisServerConnections>
+        <arcgisServerConnection accessType="editable" connectionType="SERVER" label="Esri Campus Server" name="ba9ed688-fcb6-405a-8067-2e06e3ed6cc5" referer="https://WIN-FJBK34EU6NT:6143/geoevent/admin/datastores/agsconnection/ba9ed688-fcb6-405a-8067-2e06e3ed6cc5" tokenConfigured="false" updateIntervalSec="300" url="http://services.arcgis.com/QAwEPKy5RRhZXekQ/arcgis/"/>
+    </arcgisServerConnections>
+</template>
