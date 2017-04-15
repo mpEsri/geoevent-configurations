@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template key="+1ZAApp0KbB39eQ1Njzu8A==" productVersion="10.5.0">
+    <geoEventServices/>
+    <inputs/>
+    <outputs>
+        <output url="http://geoeventsample1.esri.com:6180/geoevent/rest/cache/cache-out" clusterCommand="START" connector="esri-out-cache-rest-cache" connectorLabel="Publish GeoEvents on a REST endpoint" label="cache-out" name="48953fe6-dfa8-45c2-8ae4-a09efac0c40d" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/GeoEventCache/10.5.0">
+                <properties>
+                    <property name="cacheLimitSize" type="Integer">12</property>
+                    <property name="maxTracks" type="Integer">1000</property>
+                    <property name="cacheLimitMethod" type="String">Number of GeoEvents per Track</property>
+                    <property name="cleanupFrequency" type="Integer">20</property>
+                    <property name="EventLifeSpan" type="Integer">1440</property>
+                    <property name="cleanupEvents" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>de41e610-813c-42a2-9d97-647b4e811056</guid>
+                <guid>4e84814c-70bd-4149-a73f-7a66e18a4374</guid>
+                <guid>24768c50-0ee3-4d17-9fac-e0f78a4c0ec0</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/HTTP/10.5.0">
+                <properties>
+                    <property name="mode" type="String">SERVER</property>
+                    <property name="headers" type="String"></property>
+                    <property name="clientURL" type="String"></property>
+                    <property name="useClientURLProxy" type="Boolean">false</property>
+                    <property name="clientParameters" type="String"></property>
+                    <property name="postContentType" type="String"></property>
+                    <property name="acceptableMimeTypesClientMode" type="String"></property>
+                    <property name="httpMethod" type="String">GET</property>
+                    <property name="httpTimeoutValue" type="Integer">30</property>
+                    <property name="clientURLProxy" type="String"></property>
+                </properties>
+            </transport>
+        </output>
+    </outputs>
+    <geoEventDefinitions/>
+    <tags/>
+    <connectors>
+        <connector accessType="editable" label="Publish GeoEvents on a REST endpoint" name="esri-out-cache-rest-cache" type="outbound">
+            <adapter uri="com.esri.ges.adapter.outbound/GeoEventCache/10.5.0"/>
+            <defaultName>cache-out</defaultName>
+            <description>Creates a REST end point that can be used to query GeoEvents. The URL of the REST endpoint will be http://server:port/geoevent/rest/cache/{output name}?f={text|json|kml|rss}. For example, if you want to retrieve GeoEvents from an output called rest-out in JSON format, the URL would be http://server:port/geoevent/rest/cache/rest-out?f=json. Please refer to the tutorial documentation for the parameters of each format.</description>
+            <properties>
+                <advanced>
+                    <property default="20" label="Frequency of Deleting Old Events (seconds)" name="cleanupFrequency" source="adapter"/>
+                    <property default="1440" label="Maximum Event Age (Minutes)" name="EventLifeSpan" source="adapter"/>
+                    <property default="name:value" label="Header Parameter Name:Value List" name="headers" source="transport"/>
+                    <property default="false" label="Delete Old Events" name="cleanupEvents" source="adapter"/>
+                    <property default="1000" label="Maximum number of tracks allowed" name="maxTracks" source="adapter"/>
+                    <property default="30" label="HTTP Timeout (in seconds)" name="httpTimeoutValue" source="transport"/>
+                </advanced>
+                <hidden>
+                    <property label="URL" name="clientURL" source="transport"/>
+                    <property default="false" label="Use URL Proxy" name="useClientURLProxy" source="transport"/>
+                    <property label="URL Proxy" name="clientURLProxy" source="transport"/>
+                    <property label="Parameters" name="clientParameters" source="transport"/>
+                    <property label="Post/Put body MIME Type" name="postContentType" source="transport"/>
+                    <property default="SERVER" label="Mode" name="mode" source="transport"/>
+                    <property label="Acceptable MIME Types" name="acceptableMimeTypesClientMode" source="transport"/>
+                    <property default="GET" label="HTTP Method" name="httpMethod" source="transport"/>
+                </hidden>
+                <shown>
+                    <property default="Number of GeoEvents per Track" label="Rest Cache Limit Method" name="cacheLimitMethod" source="adapter"/>
+                    <property default="12" label="Rest Cache Limit Size" name="cacheLimitSize" source="adapter"/>
+                </shown>
+            </properties>
+            <transport uri="com.esri.ges.transport.outbound/HTTP/10.5.0"/>
+        </connector>
+    </connectors>
+</template>
