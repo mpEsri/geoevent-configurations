@@ -1,0 +1,738 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template>
+    <geoEventServices>
+        <geoEventService name="26002220-a4cd-46f0-8aeb-3088455f7644" label="plowed-status-service" description="plowed status service" lineStyle="Diagonal" runningState="STARTED" statusDetails="">
+            <inputs>
+                <input ref="537bc627-1470-49a4-8a45-e3cbcf5378c3" label="plows-text-in" left="41" top="27" width="55" height="36"/>
+            </inputs>
+            <outputs>
+                <output ref="d9efd961-6a55-4db3-80cf-1c765d7f0197" label="vehicleslatest-LAL-fs-out" left="140" top="395" width="200" height="40"/>
+                <output ref="46aa0002-fc47-4e72-8168-17ae7d1b9154" label="plows-fs-out" left="212" top="569" width="111" height="40"/>
+                <output ref="989f299f-2dd5-4f49-81b8-3472c903271e" label="plowedstatus-fs-out" left="1232" top="336" width="83" height="36"/>
+                <output ref="23896823-bd26-44f6-8292-3cd492f77dbd" label="plowedstatus-LAL-fs-out" left="1204" top="422" width="200" height="40"/>
+                <output ref="f5e21819-a565-4646-84d9-dbe57ec866fb" label="plows-latest-fs-out" left="292" top="510" width="95" height="37"/>
+                <output ref="e08b6b3f-0e09-489d-866f-129c203a6edd" label="tcp-text-out" left="967" top="312" width="66" height="37"/>
+                <output ref="e392a106-82bc-4326-8fe9-4861cc1cb61c" label="sandy-vehicles-stream-service-out" left="8" top="482" width="118" height="40"/>
+                <output ref="a3fcf1fb-4dab-43d5-8392-11785d4fc9f8" label="vehicleshist-LAL-fs-out" left="40" top="611" width="140" height="40"/>
+            </outputs>
+            <nodes>
+                <node name="436babc6-61e1-4ecd-8356-11603b66e6b8" label="VehicleFilter" left="22" top="137" width="107" height="62">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="$DEFINITION_NAME" operator="=" value="Vehicles"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+                <node name="e4ad0836-bed4-4aa9-8cc2-72c92a3ef64e" label="Plow Update - Plowed" left="1068" top="410" width="83" height="72">
+                    <processor uri="com.esri.ges.processor/FieldCalculator/10.4.0">
+                        <properties>
+                            <property name="existingFieldName" type="String">PlowedStatus</property>
+                            <property name="expression" type="String">'Plowed'</property>
+                            <property name="newGeoEventDefinitionName" type="String">FieldCalculator</property>
+                            <property name="resultDestination" type="String">Existing Field</property>
+                            <property name="newFieldTag" type="String"></property>
+                            <property name="newFieldType" type="String">Boolean</property>
+                            <property name="newFieldName" type="String"></property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="bda86a3c-ec5a-4d87-8deb-ad4322271a81" label="Plowed Status Detection" left="230" top="274" width="115" height="54">
+                    <processor uri="com.esri.ges.processor/IncidentDetector/10.4.0">
+                        <properties>
+                            <property name="alertType" type="String">Notification</property>
+                            <property name="incidentType" type="String">Cumulative</property>
+                            <property name="expiryTime" type="Long">300</property>
+                            <property name="incidentName" type="String">PlowedStatus</property>
+                            <property name="openIncidentCondition" type="Condition">&lt;logicalCondition operator=""&gt;&lt;spatialCondition operand="GEOMETRY" operator="ENTER_ANY" geofence="SandyStreetBuffers/.*"/&gt;&lt;/logicalCondition&gt;</property>
+                            <property name="geometryType" type="String">Point</property>
+                            <property name="closeIncidentCondition" type="Condition">&lt;logicalCondition operator=""&gt;&lt;spatialCondition operand="GEOMETRY" operator="EXIT_ANY" geofence="SandyStreetBuffers/.*"/&gt;&lt;/logicalCondition&gt;</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="d9870b6c-8934-4b1d-85b3-6585ef735ec5" label="GeoFence GeoTagger" left="610" top="230" width="106" height="54">
+                    <processor uri="com.esri.ges.processor/GeoTagger/10.4.0">
+                        <properties>
+                            <property name="geofence" type="String">SandyStreetBuffers/.*</property>
+                            <property name="useCategory" type="Boolean">false</property>
+                            <property name="spatialOperator" type="String">INSIDE_ANY</property>
+                            <property name="geotagEventDefinitionName" type="String">GeoTagger1</property>
+                            <property name="geotagFieldType" type="String">DelimitedValue</property>
+                            <property name="geometryFieldName" type="String">GEOMETRY</property>
+                            <property name="geotagFieldName" type="String">RoadObjectID</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="49819958-87e0-4385-871f-452162ced46a" label="Plow Update - In Progress" left="1048" top="202" width="115" height="54">
+                    <processor uri="com.esri.ges.processor/FieldCalculator/10.4.0">
+                        <properties>
+                            <property name="existingFieldName" type="String">PlowedStatus</property>
+                            <property name="expression" type="String">'In Progress'</property>
+                            <property name="newGeoEventDefinitionName" type="String">FieldCalculator</property>
+                            <property name="resultDestination" type="String">Existing Field</property>
+                            <property name="newFieldTag" type="String"></property>
+                            <property name="newFieldType" type="String">Boolean</property>
+                            <property name="newFieldName" type="String"></property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="83f19679-7ba5-4e8a-83aa-b81d7cf70e94" label="PlowedStatus" left="1180" top="87" width="116" height="62">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="$DEFINITION_NAME" operator="=" value="Plowed_Status_Update"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+                <node name="0acd62d2-2367-4297-8627-6091023096a0" label="SnowPlowFilter" left="159" top="173" width="125" height="62">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="vehicletype" operator="=" value="Snow Plow"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+                <node name="18902c23-ad79-4dd7-871f-c475ff7e30be" label="GeoFence Geotagger2" left="610" top="398" width="106" height="54">
+                    <processor uri="com.esri.ges.processor/GeoTagger/10.4.0">
+                        <properties>
+                            <property name="geofence" type="String">SandyStreetBuffers/.*</property>
+                            <property name="useCategory" type="Boolean">false</property>
+                            <property name="spatialOperator" type="String">INSIDE_ANY</property>
+                            <property name="geotagEventDefinitionName" type="String">GeoTagger2</property>
+                            <property name="geotagFieldType" type="String">DelimitedValue</property>
+                            <property name="geometryFieldName" type="String">GEOMETRY</property>
+                            <property name="geotagFieldName" type="String">RoadObjectID</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="0cefe4b1-75fd-4d7e-8287-d88d8f4cf86a" label="Status Plowed" left="390" top="409" width="116" height="62">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="status" operator="=" value="Ended"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+                <node name="639622ac-9c76-40cf-8c6d-e445c332400c" label="Field Splitter 2" left="770" top="398" width="58" height="72">
+                    <processor uri="com.esri.geoevent.processor/FieldSplitter/10.4.0">
+                        <properties>
+                            <property name="fieldSplitter" type="String">,</property>
+                            <property name="fieldToSplit" type="String">RoadObjectID</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="4bbc34ff-46d3-4cec-84f1-d9f4ff10895a" label="Field Splitter" left="750" top="190" width="63" height="72">
+                    <processor uri="com.esri.geoevent.processor/FieldSplitter/10.4.0">
+                        <properties>
+                            <property name="fieldSplitter" type="String">,</property>
+                            <property name="fieldToSplit" type="String">RoadObjectID</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="9714c463-6c52-4005-8974-33bc28831da8" label="FM1" left="891" top="201" width="88" height="69">
+                    <processor uri="com.esri.ges.processor/FieldMapper/10.4.0">
+                        <properties>
+                            <property name="inputFields" type="String">RoadObjectID,status</property>
+                            <property name="outputFields" type="String">OBJECTID,PlowedStatus</property>
+                            <property name="inputGeoEventDefinition" type="GeoEventDefinition">GeoTagger1</property>
+                            <property name="outputGeoEventDefinition" type="GeoEventDefinition">Plowed_Status_Update</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="0fc2b8a8-4237-4564-83c4-b39a748d1a76" label="FM2" left="892" top="410" width="96" height="48">
+                    <processor uri="com.esri.ges.processor/FieldMapper/10.4.0">
+                        <properties>
+                            <property name="inputFields" type="String">RoadObjectID,status</property>
+                            <property name="outputFields" type="String">OBJECTID,PlowedStatus</property>
+                            <property name="inputGeoEventDefinition" type="GeoEventDefinition">GeoTagger2</property>
+                            <property name="outputGeoEventDefinition" type="GeoEventDefinition">Plowed_Status_Update</property>
+                        </properties>
+                    </processor>
+                </node>
+                <node name="a06d5146-092b-4e00-810d-a902096ca139" label="Status In Progress" left="390" top="161" width="161" height="63">
+                    <filter>
+                        <logicalCondition operator="AND">
+                            <attributeCondition operand="status" operator="=" value="Started"/>
+                        </logicalCondition>
+                    </filter>
+                </node>
+            </nodes>
+            <flow>
+                <from ref="436babc6-61e1-4ecd-8356-11603b66e6b8" label="VehicleFilter">
+                    <to ref="f5e21819-a565-4646-84d9-dbe57ec866fb" label="plows-latest-fs-out"/>
+                    <to ref="46aa0002-fc47-4e72-8168-17ae7d1b9154" label="plows-fs-out"/>
+                    <to ref="e392a106-82bc-4326-8fe9-4861cc1cb61c" label="sandy-vehicles-stream-service-out"/>
+                    <to ref="d9efd961-6a55-4db3-80cf-1c765d7f0197" label="vehicleslatest-LAL-fs-out"/>
+                    <to ref="a3fcf1fb-4dab-43d5-8392-11785d4fc9f8" label="vehicleshist-LAL-fs-out"/>
+                    <to ref="0acd62d2-2367-4297-8627-6091023096a0" label="SnowPlowFilter"/>
+                </from>
+                <from ref="bda86a3c-ec5a-4d87-8deb-ad4322271a81" label="Plowed Status Detection">
+                    <to ref="a06d5146-092b-4e00-810d-a902096ca139" label="Status In Progress"/>
+                    <to ref="0cefe4b1-75fd-4d7e-8287-d88d8f4cf86a" label="Status Plowed"/>
+                </from>
+                <from ref="e4ad0836-bed4-4aa9-8cc2-72c92a3ef64e" label="Plow Update - Plowed">
+                    <to ref="989f299f-2dd5-4f49-81b8-3472c903271e" label="plowedstatus-fs-out"/>
+                    <to ref="e08b6b3f-0e09-489d-866f-129c203a6edd" label="tcp-text-out"/>
+                    <to ref="23896823-bd26-44f6-8292-3cd492f77dbd" label="plowedstatus-LAL-fs-out"/>
+                </from>
+                <from ref="d9870b6c-8934-4b1d-85b3-6585ef735ec5" label="GeoFence GeoTagger">
+                    <to ref="4bbc34ff-46d3-4cec-84f1-d9f4ff10895a" label="Field Splitter"/>
+                </from>
+                <from ref="49819958-87e0-4385-871f-452162ced46a" label="Plow Update - In Progress">
+                    <to ref="989f299f-2dd5-4f49-81b8-3472c903271e" label="plowedstatus-fs-out"/>
+                    <to ref="e08b6b3f-0e09-489d-866f-129c203a6edd" label="tcp-text-out"/>
+                    <to ref="23896823-bd26-44f6-8292-3cd492f77dbd" label="plowedstatus-LAL-fs-out"/>
+                </from>
+                <from ref="83f19679-7ba5-4e8a-83aa-b81d7cf70e94" label="PlowedStatus">
+                    <to ref="989f299f-2dd5-4f49-81b8-3472c903271e" label="plowedstatus-fs-out"/>
+                    <to ref="23896823-bd26-44f6-8292-3cd492f77dbd" label="plowedstatus-LAL-fs-out"/>
+                </from>
+                <from ref="0acd62d2-2367-4297-8627-6091023096a0" label="SnowPlowFilter">
+                    <to ref="bda86a3c-ec5a-4d87-8deb-ad4322271a81" label="Plowed Status Detection"/>
+                </from>
+                <from ref="18902c23-ad79-4dd7-871f-c475ff7e30be" label="GeoFence Geotagger2">
+                    <to ref="639622ac-9c76-40cf-8c6d-e445c332400c" label="Field Splitter 2"/>
+                </from>
+                <from ref="537bc627-1470-49a4-8a45-e3cbcf5378c3" label="plows-text-in">
+                    <to ref="436babc6-61e1-4ecd-8356-11603b66e6b8" label="VehicleFilter"/>
+                </from>
+                <from ref="0cefe4b1-75fd-4d7e-8287-d88d8f4cf86a" label="Status Plowed">
+                    <to ref="18902c23-ad79-4dd7-871f-c475ff7e30be" label="GeoFence Geotagger2"/>
+                </from>
+                <from ref="639622ac-9c76-40cf-8c6d-e445c332400c" label="Field Splitter 2">
+                    <to ref="0fc2b8a8-4237-4564-83c4-b39a748d1a76" label="FM2"/>
+                </from>
+                <from ref="4bbc34ff-46d3-4cec-84f1-d9f4ff10895a" label="Field Splitter">
+                    <to ref="9714c463-6c52-4005-8974-33bc28831da8" label="FM1"/>
+                </from>
+                <from ref="9714c463-6c52-4005-8974-33bc28831da8" label="FM1">
+                    <to ref="49819958-87e0-4385-871f-452162ced46a" label="Plow Update - In Progress"/>
+                </from>
+                <from ref="0fc2b8a8-4237-4564-83c4-b39a748d1a76" label="FM2">
+                    <to ref="e4ad0836-bed4-4aa9-8cc2-72c92a3ef64e" label="Plow Update - Plowed"/>
+                </from>
+                <from ref="a06d5146-092b-4e00-810d-a902096ca139" label="Status In Progress">
+                    <to ref="d9870b6c-8934-4b1d-85b3-6585ef735ec5" label="GeoFence GeoTagger"/>
+                </from>
+            </flow>
+            <geoEventsReceivedRateRange max="0.0" min="0.0"/>
+            <geoEventsSentRateRange max="0.0" min="0.0"/>
+        </geoEventService>
+    </geoEventServices>
+    <inputs>
+        <input clusterCommand="START" connector="esri-in-tcp-text-generictext" connectorLabel="Receive Text from a TCP Socket" label="plows-text-in" name="537bc627-1470-49a4-8a45-e3cbcf5378c3" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.inbound/Text/10.4.0">
+                <properties>
+                    <property name="CreateFixedGeoEventDefinitions" type="Boolean">true</property>
+                    <property name="YGeometryField" type="String">point_y</property>
+                    <property name="ZGeometryField" type="String">point_z</property>
+                    <property name="MessageSeparator" type="String">\n</property>
+                    <property name="IncomingDataContainsGeoEventDefinition" type="Boolean">true</property>
+                    <property name="CreateUnrecognizedGeoEventDefinitions" type="Boolean">true</property>
+                    <property name="WKTextGeometryField" type="String"></property>
+                    <property name="LocaleForNumberFormatter" type="String"></property>
+                    <property name="BuildGeometryFromFields" type="Boolean">true</property>
+                    <property name="CustomDateFormat" type="String"></property>
+                    <property name="NewFixedGeoEventDefinitionName" type="String"></property>
+                    <property name="WKIDGeometryField" type="String"></property>
+                    <property name="ExistingFixedGeoEventDefinitionName" type="GeoEventDefinition">incident</property>
+                    <property name="XGeometryField" type="String">point_x</property>
+                    <property name="AttributeSeparator" type="String">,</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>d9e08ae5-2f47-4707-a4d7-4a2408447623</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.inbound/TCP/10.4.0">
+                <properties>
+                    <property name="mode" type="String">SERVER</property>
+                    <property name="handshake" type="String"></property>
+                    <property name="port" type="Integer">5565</property>
+                    <property name="host" type="String">localhost</property>
+                    <property name="clientConnectionTimeout" type="Integer">60</property>
+                </properties>
+            </transport>
+        </input>
+    </inputs>
+    <outputs>
+        <output clusterCommand="START" connector="esri-out-json-fs-add" connectorLabel="Add a Feature" label="plows-fs-out" name="46aa0002-fc47-4e72-8168-17ae7d1b9154" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.4.0">
+                <properties>
+                    <property name="updateInterval" type="String">1</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>d9e08ae5-2f47-4707-a4d7-4a2408447623</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/FeatureService/10.4.0">
+                <properties>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="maximumTransactionSize" type="Integer">500</property>
+                    <property name="featureLifeSpan" type="Integer">15</property>
+                    <property name="serviceName" type="ArcGISFeatureService">Vehicles</property>
+                    <property name="updateOnly" type="Boolean">false</property>
+                    <property name="trackIDField" type="ArcGISField">OBJECTID</property>
+                    <property name="layerIndex" type="ArcGISLayer">0</property>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="cleanupTimeField" type="ArcGISDateTimeField">time</property>
+                    <property name="cleanupFeatures" type="Boolean">true</property>
+                    <property name="cleanupFrequency" type="Integer">20</property>
+                    <property name="append" type="Boolean">true</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-json-fs-update" connectorLabel="Update a Feature" label="vehicleslatest-LAL-fs-out" name="d9efd961-6a55-4db3-80cf-1c765d7f0197" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.4.0">
+                <properties>
+                    <property name="updateInterval" type="String">1</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">true</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>d9e08ae5-2f47-4707-a4d7-4a2408447623</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/FeatureService/10.4.0">
+                <properties>
+                    <property name="datastore" type="ArcGISConnection">1ba793b5-76a2-4d4b-8a2a-a899635f2e53</property>
+                    <property name="maximumTransactionSize" type="Integer">500</property>
+                    <property name="featureLifeSpan" type="Integer">1440</property>
+                    <property name="serviceName" type="ArcGISFeatureService">VehiclesLatest</property>
+                    <property name="layerIndex" type="ArcGISLayer">0</property>
+                    <property name="trackIDField" type="ArcGISField">vehiclename</property>
+                    <property name="updateOnly" type="Boolean">false</property>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="cleanupTimeField" type="ArcGISDateTimeField">time</property>
+                    <property name="cleanupFeatures" type="Boolean">false</property>
+                    <property name="cleanupFrequency" type="Integer">20</property>
+                    <property name="append" type="Boolean">false</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-text-tcp-client" connectorLabel="Push Text to an External TCP Socket" label="tcp-text-out" name="e08b6b3f-0e09-489d-866f-129c203a6edd" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/Text/10.4.0">
+                <properties>
+                    <property name="LocaleForNumberFormatter" type="String"></property>
+                    <property name="CustomDateFormat" type="String"></property>
+                    <property name="MessageSeparator" type="String">\n</property>
+                    <property name="mimeType" type="String">text/plain</property>
+                    <property name="CustomDateFormatType" type="String">ISO 8601 Format</property>
+                    <property name="AttributeSeparator" type="String">,</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>4e7cc2ad-7727-4735-ab7a-af667bd3ed06</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/TCP/10.4.0">
+                <properties>
+                    <property name="mode" type="String">CLIENT</property>
+                    <property name="port" type="Integer">5575</property>
+                    <property name="host" type="String">localhost</property>
+                    <property name="clientConnectionTimeout" type="Integer">60</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-feature-stream-service" connectorLabel="Send Features to a Stream Service" label="sandy-vehicles-stream-service-out" name="e392a106-82bc-4326-8fe9-4861cc1cb61c" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.4.0">
+                <properties>
+                    <property name="updateInterval" type="String">0.01</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>d9e08ae5-2f47-4707-a4d7-4a2408447623</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/StreamService/10.4.0">
+                <properties>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="geoEventDefinitionName" type="GeoEventDefinition">Vehicles</property>
+                    <property name="serviceName" type="ArcGISStreamService">SandyVehicles</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-json-fs-update" connectorLabel="Update a Feature" label="plows-latest-fs-out" name="f5e21819-a565-4646-84d9-dbe57ec866fb" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.4.0">
+                <properties>
+                    <property name="updateInterval" type="String">1</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">true</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>d9e08ae5-2f47-4707-a4d7-4a2408447623</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/FeatureService/10.4.0">
+                <properties>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="maximumTransactionSize" type="Integer">500</property>
+                    <property name="featureLifeSpan" type="Integer">1440</property>
+                    <property name="serviceName" type="ArcGISFeatureService">VehiclesLatest</property>
+                    <property name="layerIndex" type="ArcGISLayer">0</property>
+                    <property name="trackIDField" type="ArcGISField">vehiclename</property>
+                    <property name="updateOnly" type="Boolean">false</property>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="cleanupTimeField" type="ArcGISDateTimeField">time</property>
+                    <property name="cleanupFeatures" type="Boolean">false</property>
+                    <property name="cleanupFrequency" type="Integer">20</property>
+                    <property name="append" type="Boolean">false</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-json-fs-add" connectorLabel="Add a Feature" label="vehicleshist-LAL-fs-out" name="a3fcf1fb-4dab-43d5-8392-11785d4fc9f8" runningState="STARTED" statusDetails="Cannot write to layer  because the layer does not exist." supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.4.0">
+                <properties>
+                    <property name="updateInterval" type="String">1</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">false</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>d9e08ae5-2f47-4707-a4d7-4a2408447623</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/FeatureService/10.4.0">
+                <properties>
+                    <property name="datastore" type="ArcGISConnection">1ba793b5-76a2-4d4b-8a2a-a899635f2e53</property>
+                    <property name="maximumTransactionSize" type="Integer">500</property>
+                    <property name="featureLifeSpan" type="Integer">60</property>
+                    <property name="serviceName" type="ArcGISFeatureService">Vehicles</property>
+                    <property name="updateOnly" type="Boolean">false</property>
+                    <property name="trackIDField" type="ArcGISField">OBJECTID</property>
+                    <property name="layerIndex" type="ArcGISLayer">0</property>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="cleanupTimeField" type="ArcGISDateTimeField">time</property>
+                    <property name="cleanupFeatures" type="Boolean">true</property>
+                    <property name="cleanupFrequency" type="Integer">20</property>
+                    <property name="append" type="Boolean">true</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-json-fs-update" connectorLabel="Update a Feature" label="plowedstatus-fs-out" name="989f299f-2dd5-4f49-81b8-3472c903271e" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.4.0">
+                <properties>
+                    <property name="updateInterval" type="String">1</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">true</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>4e7cc2ad-7727-4735-ab7a-af667bd3ed06</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/FeatureService/10.4.0">
+                <properties>
+                    <property name="datastore" type="ArcGISConnection">default</property>
+                    <property name="maximumTransactionSize" type="Integer">500</property>
+                    <property name="featureLifeSpan" type="Integer">1440</property>
+                    <property name="serviceName" type="ArcGISFeatureService">SandyPlowedStatus</property>
+                    <property name="layerIndex" type="ArcGISLayer">0</property>
+                    <property name="trackIDField" type="ArcGISField">OBJECTID</property>
+                    <property name="updateOnly" type="Boolean">false</property>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="cleanupTimeField" type="ArcGISDateTimeField"></property>
+                    <property name="cleanupFeatures" type="Boolean">false</property>
+                    <property name="cleanupFrequency" type="Integer">20</property>
+                    <property name="append" type="Boolean">false</property>
+                </properties>
+            </transport>
+        </output>
+        <output clusterCommand="START" connector="esri-out-json-fs-update" connectorLabel="Update a Feature" label="plowedstatus-LAL-fs-out" name="23896823-bd26-44f6-8292-3cd492f77dbd" runningState="STARTED" statusDetails="NULL" supportsAllGeoEventDefinitions="true">
+            <adapter uri="com.esri.ges.adapter.outbound/JSON/10.4.0">
+                <properties>
+                    <property name="updateInterval" type="String">1</property>
+                    <property name="flattenEvents" type="Boolean">true</property>
+                    <property name="keepEventsUnique" type="Boolean">true</property>
+                    <property name="mimeType" type="String">application/json</property>
+                    <property name="prettyJson" type="Boolean">false</property>
+                </properties>
+            </adapter>
+            <geoEventDefinitionHistory>
+                <guid>4e7cc2ad-7727-4735-ab7a-af667bd3ed06</guid>
+            </geoEventDefinitionHistory>
+            <geoEventsRateRange max="0.0" min="0.0"/>
+            <supportedGeoEventDefinitions/>
+            <transport uri="com.esri.ges.transport.outbound/FeatureService/10.4.0">
+                <properties>
+                    <property name="datastore" type="ArcGISConnection">1ba793b5-76a2-4d4b-8a2a-a899635f2e53</property>
+                    <property name="maximumTransactionSize" type="Integer">500</property>
+                    <property name="featureLifeSpan" type="Integer">1440</property>
+                    <property name="serviceName" type="ArcGISFeatureService">SandyPlowedStatus</property>
+                    <property name="layerIndex" type="ArcGISLayer">0</property>
+                    <property name="trackIDField" type="ArcGISField">OBJECTID</property>
+                    <property name="updateOnly" type="Boolean">false</property>
+                    <property name="path" type="ArcGISFolder">/</property>
+                    <property name="cleanupTimeField" type="ArcGISDateTimeField"></property>
+                    <property name="cleanupFeatures" type="Boolean">false</property>
+                    <property name="cleanupFrequency" type="Integer">20</property>
+                    <property name="append" type="Boolean">false</property>
+                </properties>
+            </transport>
+        </output>
+    </outputs>
+    <geoEventDefinitions>
+        <geoEventDefinition guid="d9e08ae5-2f47-4707-a4d7-4a2408447623" name="Vehicles" owner="arcgis" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="speed" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="heading" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="time" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="vehiclename" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="vehicletype" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="agency" type="Integer" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="point_x" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="point_y" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="point_z" type="Double" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="6d2a51c2-35a6-4dca-b2b6-edecb38cb9fd" name="GeoTagger1" owner="GeoFence GeoTagger" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="id" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="name" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="type" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="status" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="alertType" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="openCondition" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="closeCondition" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="description" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="timestamp" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="definitionName" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="definitionOwner" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="trackId" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="duration" type="Long" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="dismissed" type="Boolean" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="assignedTo" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="note" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="RoadObjectID" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="deb9773c-9666-4de6-8ab2-ae599b753917" name="GeoTagger2" owner="GeoFence Geotagger2" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="id" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="name" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="type" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="status" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="alertType" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="openCondition" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="closeCondition" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="description" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="timestamp" type="Date" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TIME_START</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="definitionName" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="definitionOwner" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="trackId" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="geometry" type="Geometry" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>GEOMETRY</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="duration" type="Long" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="dismissed" type="Boolean" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="assignedTo" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="note" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="RoadObjectID" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+        <geoEventDefinition guid="4e7cc2ad-7727-4735-ab7a-af667bd3ed06" name="Plowed_Status_Update" owner="admin" accessType="editable">
+            <fieldDefinitions>
+                <fieldDefinition name="OBJECTID" type="String" cardinality="One">
+                    <fieldDefinitionTag>
+                        <name>TRACK_ID</name>
+                    </fieldDefinitionTag>
+                    <fieldDefinitions/>
+                </fieldDefinition>
+                <fieldDefinition name="PlowedStatus" type="String" cardinality="One">
+                    <fieldDefinitions/>
+                </fieldDefinition>
+            </fieldDefinitions>
+        </geoEventDefinition>
+    </geoEventDefinitions>
+    <tags>
+        <tag>
+            <name>TIME_START</name>
+            <description>The start time of the observation</description>
+            <accessType>editable</accessType>
+            <types>
+                <type>Date</type>
+            </types>
+        </tag>
+        <tag>
+            <name>GEOMETRY</name>
+            <description>The point, polygon, or polyline of the observation.</description>
+            <accessType>editable</accessType>
+            <types>
+                <type>Geometry</type>
+            </types>
+        </tag>
+        <tag>
+            <name>TRACK_ID</name>
+            <description>The unique id of the entity being Tracked.</description>
+            <accessType>editable</accessType>
+            <types>
+                <type>String</type>
+                <type>Date</type>
+                <type>Double</type>
+                <type>Float</type>
+                <type>Geometry</type>
+                <type>Integer</type>
+                <type>Long</type>
+                <type>Short</type>
+                <type>Boolean</type>
+                <type>Group</type>
+            </types>
+        </tag>
+    </tags>
+    <arcgisServerConnections>
+        <arcgisServerConnection accessType="editable" connectionType="AGOL" label="LearnArcGISLessons" name="1ba793b5-76a2-4d4b-8a2a-a899635f2e53" referer="https://WIN-FJBK34EU6NT:6143/geoevent/admin/datastores/agsconnection/1ba793b5-76a2-4d4b-8a2a-a899635f2e53" token="jJkfHUIrWF3e5HNNkvHO5DWOQsfcp3mjzOr8D5CDyQkagGIfIgHFj8R1nhnzUzhv55Q0Im+bl2qNihVVuvlHjkByvBywWKonbM/Xc5mYXv7NSAklSorVy/ZbBnBbEfyWiXKO/tOrppmuh1vUQntybaBL65MK56Es/TSUz0hIuEvGZz+qSm3dCiUCql3ar4gDpu47Z19Ri90SzO0xdagznaXfyAepKM9aQpOEfVE4bIu9sbT2qRZ0aaMVNcIKoeh8YvGhO7V0jGE1Hq8yz+bxfxiAoiNpJTcDC4cvI9CJZDclHRaN/uHRwwQGguwPcLLt4AFWLv8jsvwvMxNrAY61GX7ASlUQ4QcXhDXIzW50CSo71abonYC4I5lnhsehArCP" tokenConfigured="false" updateIntervalSec="3600" url="http://www.arcgis.com/">
+            <properties>
+                <property name="agol.username" type="String">Morakot_Pilouk_LearnArcGIS</property>
+                <property name="agol.password" type="Password">x+Y19kRfSm1DXCBlOWyq5Q==</property>
+            </properties>
+        </arcgisServerConnection>
+    </arcgisServerConnections>
+    <geofenceSynchronizations>
+        <geofenceSynchronization id="f3610735-dbe3-4103-89b1-0d6dd6444d76" label="SandyStreetBuffers" dataStoreName="1ba793b5-76a2-4d4b-8a2a-a899635f2e53" path="/" serviceName="SandyPlowedStatus" layer="Plowed Status" refreshInterval="900" nameField="OBJECTID" categoryField="SandyStreetBuffers" maxAllowableOffset="-1" wkid="4326" incrementalUpdate="true">
+            <serverType>FeatureServer</serverType>
+        </geofenceSynchronization>
+    </geofenceSynchronizations>
+</template>
